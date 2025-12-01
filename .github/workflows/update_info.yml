@@ -34,6 +34,7 @@ jobs:
       - name: Process public/
         run: |
           mkdir -p files
+          mkdir -p public
           cp -Rfv public/* files/
 
       # - name: Install Python dependencies (if needed)
@@ -52,6 +53,7 @@ jobs:
 
       - name: Process web/
         run: |
+          mkdir -p files/web
           rm -rf files/web || true
           cp -Rf web files/
 

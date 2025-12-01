@@ -50,6 +50,7 @@ jobs:
         run: |
           echo "changed files :"
           cat .github/outputs/all_changed_files.json
+          echo ""
           echo "update:"
           python scripts/update_info.py
 

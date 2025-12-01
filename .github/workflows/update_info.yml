@@ -75,6 +75,7 @@ jobs:
           file_pattern: "files/**/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
+          commit_author: ""
           skip_dirty_check: false
 
       - name: Get pending Count
@@ -101,5 +102,5 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           AUTO_COMMIT_HASH=$(git rev-parse HEAD)
-          TARGET_REMOTE_BRANCH="dist"
+          TARGET_REMOTE_BRANCH="refs/heads/dist"
           git push -f origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"

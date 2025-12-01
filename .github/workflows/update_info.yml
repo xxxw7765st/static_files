@@ -81,7 +81,7 @@ jobs:
         id: check_queue
         uses: softprops/turnstyle@v3
         with:
-          continue-after-seconds: 1
+          continue-after-seconds: 5
           same-branch-only: true
 
       - name: After updating info

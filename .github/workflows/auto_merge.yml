@@ -26,6 +26,7 @@ jobs:
           branch: main
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
+          commit_author: ""
           skip_dirty_check: false
 
       - name: Merge main to data

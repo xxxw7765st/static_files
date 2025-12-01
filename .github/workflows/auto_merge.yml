@@ -1,4 +1,4 @@
-name: Clean Files & Merge to Data Branch
+name: Clean and Merge
 on:
   push:
     branches: [main]

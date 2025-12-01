@@ -3,7 +3,7 @@ on:
   push:
     branches: [data]
   workflow_run:
-    workflows: [auto_merge.yml]
+    workflows: [Clean and Merge]
     types: [completed]
 
 concurrency:

@@ -34,15 +34,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT  }}
         run: |
           if git ls-remote --heads origin data | grep -q data; then
+            git checkout data
             git pull origin data --no-rebase
-            git merge main -Xtheirs --no-edit --no-ff
-            if [ $? -ne 0 ]; then
-              echo "Merge conflict detected, using main branch version"
+            set +e
+            git merge main --allow-unrelated-histories --no-edit
+            MERGE_STATUS=$?
+            set -e
+            if [ $MERGE_STATUS -ne 0 ]; then
+              echo "Merge had conflicts, resolving..."
               git checkout --theirs -- .
-              git add .
-              git commit -m "CI: Merge main to data (resolve conflicts with main)"
+              git add -A
+              if ! git diff --cached --quiet; then
+                git commit -m "CI: Merge main to data (auto-resolve conflicts)"
+              else
+                echo "No changes to commit after conflict resolution"
+              fi
             fi
           else
+            echo "Creating new data branch from main"
             git checkout -b data
           fi
           git push origin data

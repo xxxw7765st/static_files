@@ -3,16 +3,16 @@
   "name": "assets",
   "relative_path": "",
   "size": 6,
-  "updated_at": "2025-12-01T11:20:25.038882+00:00",
-  "created_at": "2025-12-01T11:20:25.038882+00:00",
+  "updated_at": "2025-12-01T11:32:06.013599+00:00",
+  "created_at": "2025-12-01T11:32:06.013599+00:00",
   "children": {
     "@hash_name@test.txt": {
       "type": "file",
       "name": "@hash_name@test.txt",
       "relative_path": "@hash_name@test.txt",
       "size": 6,
-      "updated_at": "2025-12-01T11:20:25.038714+00:00",
-      "created_at": "2025-12-01T11:20:25.038714+00:00",
+      "updated_at": "2025-12-01T11:32:06.013436+00:00",
+      "created_at": "2025-12-01T11:32:06.013436+00:00",
       "children": null
     },
     "test": {
@@ -20,16 +20,16 @@
       "name": "test",
       "relative_path": "test",
       "size": 0,
-      "updated_at": "2025-12-01T11:20:25.038714+00:00",
-      "created_at": "2025-12-01T11:20:25.038714+00:00",
+      "updated_at": "2025-12-01T11:32:06.013436+00:00",
+      "created_at": "2025-12-01T11:32:06.013436+00:00",
       "children": {
         "test.txt": {
           "type": "file",
           "name": "test.txt",
           "relative_path": "test/test.txt",
           "size": 0,
-          "updated_at": "2025-12-01T11:20:25.038714+00:00",
-          "created_at": "2025-12-01T11:20:25.038714+00:00",
+          "updated_at": "2025-12-01T11:32:06.013436+00:00",
+          "created_at": "2025-12-01T11:32:06.013436+00:00",
           "children": null
         }
       }

@@ -3,36 +3,36 @@
   "name": "assets",
   "relative_path": "",
   "size": 6,
-  "updated_at": "2025-12-01T11:38:02.269685+00:00",
-  "created_at": "2025-12-01T11:38:02.269685+00:00",
+  "updated_at": "2025-12-01T11:45:48.471632+00:00",
+  "created_at": "2025-12-01T11:45:48.471632+00:00",
   "children": {
-    "@hash_name@test.txt": {
-      "type": "file",
-      "name": "@hash_name@test.txt",
-      "relative_path": "@hash_name@test.txt",
-      "size": 6,
-      "updated_at": "2025-12-01T11:38:02.269514+00:00",
-      "created_at": "2025-12-01T11:38:02.269514+00:00",
-      "children": null
-    },
     "test": {
       "type": "folder",
       "name": "test",
       "relative_path": "test",
       "size": 0,
-      "updated_at": "2025-12-01T11:38:02.269514+00:00",
-      "created_at": "2025-12-01T11:38:02.269514+00:00",
+      "updated_at": "2025-12-01T11:45:48.471459+00:00",
+      "created_at": "2025-12-01T11:45:48.471459+00:00",
       "children": {
-        "test.txt": {
+        "test2.txt": {
           "type": "file",
-          "name": "test.txt",
-          "relative_path": "test/test.txt",
+          "name": "test2.txt",
+          "relative_path": "test/test2.txt",
           "size": 0,
-          "updated_at": "2025-12-01T11:38:02.269514+00:00",
-          "created_at": "2025-12-01T11:38:02.269514+00:00",
+          "updated_at": "2025-12-01T11:45:48.471459+00:00",
+          "created_at": "2025-12-01T11:45:48.471459+00:00",
           "children": null
         }
       }
+    },
+    "test2_H6uNOLJ3O_.txt": {
+      "type": "file",
+      "name": "test2_H6uNOLJ3O_.txt",
+      "relative_path": "test2_H6uNOLJ3O_.txt",
+      "size": 6,
+      "updated_at": "2025-12-01T11:45:48.471459+00:00",
+      "created_at": "2025-12-01T11:45:48.471459+00:00",
+      "children": null
     }
   }
 }

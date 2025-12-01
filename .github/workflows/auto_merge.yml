@@ -13,7 +13,6 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v5
         with:
-          ref: main
           fetch-depth: 1
           persist-credentials: true
 
@@ -28,7 +27,7 @@ jobs:
           file_pattern: "files/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
-          skip_dirty_check: false
+          skip_dirty_check: true
 
       - name: Merge main to data
         run: |
@@ -42,3 +41,8 @@ jobs:
             git checkout -b data
             git push -u origin data
           fi
+
+      # - uses: benc-uk/workflow-dispatch@v1  # 使用该 Action
+      #   with:
+      #      workflow: update_info.yml
+      #      ref: data

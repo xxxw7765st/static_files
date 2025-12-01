@@ -24,10 +24,9 @@ jobs:
         with:
           commit_message: "CI: Clean all files in files/"
           branch: main
-          file_pattern: "files/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
-          skip_dirty_check: true
+          skip_dirty_check: false
 
       - name: Merge main to data
         run: |

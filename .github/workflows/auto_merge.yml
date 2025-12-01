@@ -14,7 +14,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 1
-          token: ${{ secrets.PAT }}
           persist-credentials: true
 
       - name: Clean
@@ -30,8 +29,6 @@ jobs:
           skip_dirty_check: false
 
       - name: Merge main to data
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT  }}
         run: |
           git fetch origin --depth=1
           if git ls-remote --heads origin data | grep -q data; then
@@ -56,8 +53,3 @@ jobs:
             git checkout -b data
           fi
           git push origin data
-
-      # - uses: benc-uk/workflow-dispatch@v1  # 使用该 Action
-      #   with:
-      #      workflow: update_info.yml
-      #      ref: data

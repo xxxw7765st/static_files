@@ -1,4 +1,4 @@
-name: Clean Files & Merge to Data Branch
+name: Clean and Merge
 on:
   push:
     branches: [main]
@@ -13,7 +13,6 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v5
         with:
-          ref: main
           fetch-depth: 1
           persist-credentials: true
 
@@ -25,20 +24,32 @@ jobs:
         with:
           commit_message: "CI: Clean all files in files/"
           branch: main
-          file_pattern: "files/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
           skip_dirty_check: false
 
       - name: Merge main to data
         run: |
+          git fetch origin --depth=1
           if git ls-remote --heads origin data | grep -q data; then
-            git fetch origin data:data --depth=1
-            git reset --hard origin/data
-            git checkout data
-            git merge main -X ours --no-edit
-            git push origin data
+            git checkout -B data origin/data
+            git pull origin data --no-rebase
+            set +e
+            git merge main --allow-unrelated-histories --no-edit
+            MERGE_STATUS=$?
+            set -e
+            if [ $MERGE_STATUS -ne 0 ]; then
+              echo "Merge had conflicts, resolving..."
+              git checkout --theirs -- .
+              git add -A
+              if ! git diff --cached --quiet; then
+                git commit -m "CI: Merge main to data (auto-resolve conflicts)"
+              else
+                echo "No changes to commit after conflict resolution"
+              fi
+            fi
           else
+            echo "Creating new data branch from main"
             git checkout -b data
-            git push -u origin data
           fi
+          git push origin data

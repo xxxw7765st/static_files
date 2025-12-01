@@ -2,9 +2,12 @@ name: Update Data Info
 on:
   push:
     branches: [data]
+  workflow_run:
+    workflows: [Clean and Merge]
+    types: [completed]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref_name }}
+  group: update_info_on_data
   cancel-in-progress: false
 
 jobs:
@@ -31,7 +34,10 @@ jobs:
       - name: Process public/
         run: |
           mkdir -p files
-          cp -Rfv public/* files/
+          mkdir -p public
+          if [ "$(ls -A public 2>/dev/null)" ]; then
+            cp -Rfv public/* files/
+          fi
 
       # - name: Install Python dependencies (if needed)
       #   run: |
@@ -44,11 +50,14 @@ jobs:
         run: |
           echo "changed files :"
           cat .github/outputs/all_changed_files.json
+          echo ""
           echo "update:"
           python scripts/update_info.py
 
       - name: Process web/
         run: |
+          mkdir -p files/web
+          mkdir -p web
           rm -rf files/web || true
           cp -Rf web files/
 

@@ -35,7 +35,8 @@ class FileManager:
                 "children": {},
             }
 
-    def get_now(self):
+    @classmethod
+    def get_now(cls):
         return datetime.now(timezone.utc).isoformat()
 
     def update_structure(self, time: str, folder: Optional[FileInfo] = None) -> None:

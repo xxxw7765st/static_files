@@ -34,15 +34,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT  }}
         run: |
           if git ls-remote --heads origin data | grep -q data; then
-            git fetch origin data:data --depth=1
-            git reset --hard origin/data
-            git checkout data
-            git merge main -X ours --no-edit
-            git push origin data
+            git pull origin data --no-rebase
+            git merge main -Xtheirs --no-edit --no-ff
+            if [ $? -ne 0 ]; then
+              echo "Merge conflict detected, using main branch version"
+              git checkout --theirs -- .
+              git add .
+              git commit -m "CI: Merge main to data (resolve conflicts with main)"
+            fi
           else
             git checkout -b data
-            git push -u origin data
           fi
+          git push origin data
 
       # - uses: benc-uk/workflow-dispatch@v1  # 使用该 Action
       #   with:

@@ -81,12 +81,14 @@ jobs:
         id: check_queue
         uses: softprops/turnstyle@v3
         with:
-          continue-after-seconds: 5
+          continue-after-seconds: 3
           same-branch-only: true
 
       - name: After updating info
-        if: steps.check_queue.outputs.force_continued == 'false' && steps.auto_commit.outputs.changes_detected == 'true'
+        if: ! steps.check_queue.outputs.force_continued
         run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           AUTO_COMMIT_HASH=$(git rev-parse HEAD)
           TARGET_REMOTE_BRANCH="dist"
           git push -f origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"

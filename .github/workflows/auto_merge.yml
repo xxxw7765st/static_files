@@ -1,0 +1,44 @@
+name: Clean Files & Merge to Data Branch
+on:
+  push:
+    branches: [main]
+
+jobs:
+  clean-and-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Clean
+        run: rm -rf files/* || true
+
+      - name: Auto-commit if having changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "CI: Clean all files in files/"
+          branch: main
+          file_pattern: "files/*"
+          commit_user_name: "GitHub Actions"
+          commit_user_email: "actions@github.com"
+          skip_dirty_check: false
+
+      - name: Merge main to data
+        run: |
+          if git ls-remote --heads origin data | grep -q data; then
+            git fetch origin data:data --depth=1
+            git reset --hard origin/data
+            git checkout data
+            git merge main -X ours --no-edit
+            git push origin data
+          else
+            git checkout -b data
+            git push -u origin data
+          fi

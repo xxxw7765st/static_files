@@ -33,8 +33,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT  }}
         run: |
+          git fetch origin --depth=1
           if git ls-remote --heads origin data | grep -q data; then
-            git checkout data
+            git checkout -B data origin/data
             git pull origin data --no-rebase
             set +e
             git merge main --allow-unrelated-histories --no-edit

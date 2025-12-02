@@ -18,7 +18,7 @@ now = FileManager.get_now()
 folders = ["static", "assets"]
 for folder in folders:
     folder_path = f"files/{folder}/"
-    manager = FileManager(folder_path, f"web/files/info_{folder}.json")
+    manager = FileManager(folder_path, f"data/files/info_{folder}.json")
     manager.update_structure(now)
     folder_changes = [
         file[len(folder_path) :] for file in new_changes if file.startswith(folder_path)

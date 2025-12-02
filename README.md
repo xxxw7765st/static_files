@@ -4,7 +4,8 @@
 
 - files: actual data
   - static: long time cached
-- web
+- web : web files
+- data : data json
 - public: overwrite files
 
 ## branches

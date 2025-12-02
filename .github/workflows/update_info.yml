@@ -62,6 +62,13 @@ jobs:
           rm -rf files/web || true
           cp -Rf web files/
 
+      - name: Process web/
+        run: |
+          mkdir -p files/data
+          mkdir -p data
+          rm -rf files/data || true
+          cp -Rf data files/
+
       - name: Pull remote latest (conflict uses push b's content)
         run: |
           git branch --set-upstream-to=origin/data data
@@ -73,7 +80,7 @@ jobs:
         with:
           commit_message: "CI(info): update info [skip ci]"
           branch: data
-          file_pattern: "files/**/* web/files/info_*.json"
+          file_pattern: "files/**/* data/**/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
           commit_author: ""

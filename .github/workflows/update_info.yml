@@ -47,6 +47,13 @@ jobs:
       #       pip install -r requirements.txt
       #     fi
 
+      - name: Detect changes
+        run: |
+          echo "all changed files :"
+          jq . .github/outputs/all_changed_files.json
+          echo ""
+          echo "all changed and modified files :"
+          jq . .github/outputs/all_changed_and_modified_files.json
       - name: Update Info
         run: |
           echo "changed files :"

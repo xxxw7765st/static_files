@@ -30,6 +30,7 @@ jobs:
         with:
           json: true
           write_output_files: true
+          safe_output: false
 
       - name: Process public/
         run: |
@@ -72,7 +73,7 @@ jobs:
         with:
           commit_message: "CI(info): update info [skip ci]"
           branch: data
-          file_pattern: "files/**/*"
+          file_pattern: "files/**/* web/files/info_*.json"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
           commit_author: ""

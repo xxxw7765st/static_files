@@ -75,7 +75,8 @@ jobs:
           mkdir -p data
           rm -rf files/data || true
           cp -Rf data files/
-
+      - name: Tree
+        run: tree . -F -L 10
       - name: Pull remote latest (conflict uses push b's content)
         run: |
           git branch --set-upstream-to=origin/data data

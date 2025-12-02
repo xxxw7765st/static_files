@@ -2,19 +2,10 @@
   "type": "folder",
   "name": "static",
   "relative_path": "",
-  "size": 17656,
+  "size": 800,
   "updated_at": "2025-12-02T15:02:03.377726+00:00",
   "created_at": "2025-12-02T15:02:03.377726+00:00",
   "children": {
-    "@hash_name@应用锁.webp": {
-      "type": "file",
-      "name": "@hash_name@应用锁.webp",
-      "relative_path": "@hash_name@应用锁.webp",
-      "size": 16856,
-      "updated_at": "2025-12-02T15:02:03.377702+00:00",
-      "created_at": "2025-12-02T15:02:03.377702+00:00",
-      "children": null
-    },
     "搜图神器_1764417043335.webp": {
       "type": "file",
       "name": "搜图神器_1764417043335.webp",

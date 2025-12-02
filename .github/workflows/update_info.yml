@@ -75,7 +75,8 @@ jobs:
           mkdir -p data
           rm -rf files/data || true
           cp -Rf data files/
-
+      - name: Tree
+        run: tree . -F -L 10
       - name: Pull remote latest (conflict uses push b's content)
         run: |
           git branch --set-upstream-to=origin/data data
@@ -90,7 +91,7 @@ jobs:
           file_pattern: "files/**/* data/**/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
-          commit_author: ""
+          commit_author: "GitHub Actions"
           skip_dirty_check: false
 
       - name: Get pending Count

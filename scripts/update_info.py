@@ -4,8 +4,12 @@ from file_action import run_action
 from file_manager import FileManager
 
 # get changes
-with open(".github/outputs/all_changed_files.json") as f:
-    changes: list[str] = json.load(f)
+changes: list[str] = []
+try:
+    with open(".github/outputs/all_changed_files.json") as f:
+        changes: list[str] = json.load(f)
+except:
+    pass
 
 # process actions
 new_changes = []

@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime, timezone
 from typing import Literal, Optional, TypedDict
+
 from utils import format_size
 
 
@@ -46,6 +47,7 @@ class FileManager:
 
         actual_path = os.path.join(self.base_folder, folder["relative_path"])
         if not os.path.exists(actual_path):
+            folder['children'] = {}
             return
 
         # 获取实际文件系统中的文件/文件夹
@@ -62,6 +64,10 @@ class FileManager:
         recorded_items = {
             (name, child["type"]) for name, child in current_children.items()
         }
+
+        # 检测删除
+        for name, item_type in recorded_items - actual_items:
+            del current_children[name]
 
         # 检测新增
         for name, item_type in actual_items - recorded_items:
@@ -91,10 +97,6 @@ class FileManager:
                 }
                 # 递归处理新文件夹
                 self.update_structure(time, current_children[name])
-
-        # 检测删除
-        for name, item_type in recorded_items - actual_items:
-            del current_children[name]
 
         # 更新现有项目
         for name, child in current_children.items():
@@ -172,14 +174,11 @@ class FileManager:
         if node is None:
             node = self.info
         prefix = "    " * indent
+        icon = "📁" if node.get("type") == "folder" else "📄"
 
-        if sub_nodes := node.get("children"):
-            print(
-                f"{prefix}📁 {node['name']} / {format_size(node['size'])} {node['updated_at']}"
-            )
-            for sub_node in sub_nodes.values():
-                self.print_tree(sub_node, indent + 1)
-        else:
-            print(
-                f"{prefix}📄 {node['name']} / {format_size(node['size'])} {node['updated_at']}"
-            )
+        print(
+            f"{prefix}{icon} {node['name']} : {format_size(node['size'])} {node['updated_at']}"
+        )
+        sub_nodes_map = node.get("children") or {}
+        for sub_node in sub_nodes_map.values():
+            self.print_tree(sub_node, indent + 1)

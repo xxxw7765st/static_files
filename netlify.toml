@@ -1,0 +1,40 @@
+[build]
+# command = "npm run build"
+publish = "files"
+# node_version = "20"
+
+[[headers]]
+for = "/static/*"
+[headers.values]
+Cache-Control = "public, max-age=2592000, immutable"
+
+[[headers]]
+for = "*.nocache.*"
+[headers.values]
+Cache-Control = "no-cache"
+
+[[headers]]
+for = ".cache.*"
+[headers.values]
+Cache-Control = "public, max-age=3600, stale-while-revalidate=31536000"
+s-maxage = "3600"
+
+[[headers]]
+for = "/web/*"
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+for = "/data/*"
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+
+
+[[headers]]
+for = "/*"
+[headers.values]
+Access-Control-Allow-Origin = "*"
+Access-Control-Allow-Methods = "GET, OPTIONS"
+Access-Control-Allow-Headers = "Content-Type"
+Access-Control-Max-Age = "86400"
+X-UA-Compatible = "IE=edge"

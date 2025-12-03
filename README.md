@@ -14,6 +14,10 @@
 - data: `files/` changed
 - dist: auto ref --hard data head
 
+## env
+
+- `NETLIFY_HOOK`
+
 ## event
 
 ### auto merge

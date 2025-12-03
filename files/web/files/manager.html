@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub文件管理器</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+      button {
+        border-radius: 0.5rem;
+      }
+
+      .open-collapse-indicator {
+        rotate: 180deg;
+      }
+
+      .file-item {
+        border-bottom: 1px solid #e5e7eb;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+
+      .of-text-ellipsis {
+        display: -webkit-box;
+        display: box;
+        white-space: normal;
+        overflow: hidden;
+        -webkit-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        box-orient: vertical;
+        --max-line: 1;
+        -webkit-line-clamp: var(--line-count);
+        line-clamp: var(--line-count);
+      }
+
+      /* 输入框清空按钮样式 */
+      .input-clear-btn {
+        position: absolute;
+        right: 0.5rem;
+        bottom: 0;
+        transform: translateY(-50%);
+        width: 1.25rem;
+        height: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 50%;
+        cursor: pointer;
+        transition: opacity 0.15s ease-in-out;
+      }
+      .input-clear-btn:hover {
+        opacity: 80%;
+      }
+      .input-clear-btn::before {
+        content: "×";
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+      .input-with-clear {
+        position: relative;
+      }
+      .input-with-clear input {
+        padding-right: 2rem; /* 为清空按钮留出空间 */
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-50">
+    <div
+      x-data="githubFileManager()"
+      class="container py-6 px-4 mx-auto max-w-4xl"
+    >
+      <header class="mb-6 text-center">
+        <h1
+          class="text-3xl"
+          style="background: linear-gradient(90deg, #58a6ff, #f778ba); -webkit-background-clip: text; -webkit-text-fill-color: transparent"
+        >
+          GitHub文件管理器
+        </h1>
+      </header>
+      <!-- 配置面板 -->
+      <div class="mb-6 rounded-lg border shadow-md">
+        <div class="p-4 border-b">
+          <h2
+            class="flex justify-between items-center text-lg font-semibold cursor-pointer"
+            @click="toggleConfigPanel"
+          >
+            <span>配置
+              <span
+                x-text="`(${config.owner}/${config.repo})`"
+                class="text-sm text-gray-500"
+              ></span>
+            </span>
+            <svg
+              :class="configPanelOpen ? '' : 'open-collapse-indicator'"
+              class="w-5 h-5 shrink-0"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m5 15 7-7 7 7"
+              />
+            </svg>
+          </h2>
+          <div x-show="configPanelOpen" x-collapse class="mt-4">
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="input-with-clear">
+                <label class="block mb-1 text-sm font-medium text-gray-700"
+                >PAT</label>
+                <input
+                  type="password"
+                  x-model="config.pat"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="config.pat"
+                  @click="config.pat = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+              <div class="input-with-clear">
+                <label class="block mb-1 text-sm font-medium text-gray-700"
+                >Owner</label>
+                <input
+                  type="text"
+                  x-model="config.owner"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="config.owner"
+                  @click="config.owner = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+              <div class="input-with-clear">
+                <label class="block mb-1 text-sm font-medium text-gray-700"
+                >Repo</label>
+                <input
+                  type="text"
+                  x-model="config.repo"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="config.repo"
+                  @click="config.repo = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+              <div class="input-with-clear">
+                <label class="block mb-1 text-sm font-medium text-gray-700"
+                >Branch</label>
+                <input
+                  type="text"
+                  x-model="config.branch"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="config.branch"
+                  @click="config.branch = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+              <div class="input-with-clear">
+                <label class="block mb-1 text-sm font-medium text-gray-700"
+                >path prefix</label>
+                <input
+                  type="text"
+                  x-model="config.prefix"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="config.prefix"
+                  @click="config.prefix = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button
+                @click="saveConfig"
+                class="py-2 px-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+              >
+                保存
+              </button>
+              <button
+                @click="clearConfig"
+                class="py-2 px-4 text-white bg-red-500 rounded-lg hover:bg-red-600"
+              >
+                清除
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 行为面板 -->
+      <div class="rounded-lg border shadow-md">
+        <!-- Tab导航 -->
+        <div class="p-4 border-b">
+          <nav class="flex overflow-x-auto justify-between">
+            <template x-for="tab in tabs">
+              <button
+                @click="activeTab = tab.id"
+                :class="activeTab === tab.id ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-700'"
+                class="py-2 px-3 text-sm font-medium whitespace-nowrap"
+                x-text="tab.name"
+              >
+              </button>
+            </template>
+          </nav>
+        </div>
+
+        <!-- Tab内容 -->
+        <div class="p-4">
+          <!-- 上传面板 -->
+          <div x-show="activeTab === 'upload'">
+            <div class="mb-4">
+              <div class="flex items-center mb-4">
+                <input
+                  type="file"
+                  @change="addFiles"
+                  multiple
+                  class="hidden"
+                  id="fileInput"
+                >
+                <button
+                  @click="document.getElementById('fileInput').click()"
+                  class="py-2 px-4 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                >
+                  选择文件
+                </button>
+
+                <span
+                  class="flex items-center px-3 ml-auto text-sm text-gray-500"
+                >
+                  数量 :
+                  <span
+                    class="pl-2"
+                    x-text="uploadFiles.length"
+                  ></span>
+                </span>
+              </div>
+
+              <!-- 文件列表 -->
+              <div x-show="uploadFiles.length > 0" class="space-y-3">
+                <template x-for="(file, index) in uploadFiles" :key="file.id">
+                  <div
+                    class="p-3 bg-gray-50 rounded-lg file-item"
+                    :class="{'border-l-4': file.status, 
+                                                                                      'border-green-500': file.status === 'success',
+                                                                                      'border-red-500': file.status === 'error'}"
+                  >
+                    <!-- 第一行：文件名和状态 -->
+                    <div class="flex justify-between items-center mb-2">
+                      <div class="flex-1 mr-2 input-with-clear">
+                        <input
+                          type="text"
+                          x-model="file.name"
+                          :placeholder="file.origin_file.name"
+                          :disabled="file.status === 'success'"
+                          class="py-2 px-3 w-full text-sm rounded-lg border border-gray-300"
+                        >
+                        <div
+                          x-show="file.name && file.status !== 'success'"
+                          @click="file.name = ''"
+                          class="input-clear-btn"
+                        >
+                        </div>
+                      </div>
+                      <div
+                        x-show="file.status"
+                        class="py-1 px-2 text-xs rounded"
+                        :class="file.status === 'success' ? 'bg-green-100 text-green-800' : 
+                                                     file.status === 'error' ? 'bg-red-100 text-red-800' : ''"
+                      >
+                        <span
+                          x-text="file.status === 'success' ? '成功' : 
+                                                         file.status === 'error' ? '失败' : ''"
+                        ></span>
+                      </div>
+                    </div>
+
+                    <!-- 第二行：大小信息和操作按钮 -->
+                    <div class="flex justify-between items-center">
+                      <div class="text-sm text-gray-500">
+                        <span x-text="formatFileSize(file.file.size)"></span>
+                        <span
+                          x-show="file.error"
+                          class="ml-2 text-red-500"
+                          x-text="'错误: ' + file.error"
+                        ></span>
+                      </div>
+                      <div class="flex gap-2">
+                        <!-- 重置更改 -->
+                        <button
+                          @click="resetFile(index)"
+                          class="py-1 px-3 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
+                          x-show="file.name !== file.origin_file.name || file.file !== file.origin_file"
+                        >
+                          重置
+                        </button>
+
+                        <!-- 文件操作按钮 -->
+                        <button
+                          @click="showFileOperations(index)"
+                          class="py-1 px-3 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200"
+                        >
+                          操作
+                        </button>
+
+                        <!-- 删除文件 -->
+                        <button
+                          @click="removeFile(index)"
+                          class="py-1 px-3 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200"
+                        >
+                          删除
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <button
+                  @click="uploadAllFiles"
+                  :disabled="!isConfigValid || uploadFiles.length === 0"
+                  :class="{'bg-green-500 hover:bg-green-600': isConfigValid && uploadFiles.length > 0, 
+                                            'bg-gray-300': !isConfigValid || uploadFiles.length === 0}"
+                  class="py-2 px-4 w-full text-white rounded-lg transition-colors"
+                >
+                  确认上传
+                </button>
+              </div>
+
+              <div
+                x-show="uploadFiles.length === 0"
+                class="py-8 text-center text-gray-500 rounded-lg border-2"
+              >
+                暂无文件，请点击上方按钮选择文件
+              </div>
+            </div>
+          </div>
+
+          <!-- 删除面板 -->
+          <div x-show="activeTab === 'delete'" class="space-y-4">
+            <div class="input-with-clear">
+              <label class="block text-sm font-medium text-gray-700"
+              >文件路径</label>
+              <input
+                type="text"
+                x-model="deletePath"
+                placeholder="folder/file.txt"
+                class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+              >
+              <div
+                x-show="deletePath"
+                @click="deletePath = ''"
+                class="input-clear-btn"
+              >
+              </div>
+            </div>
+            <button
+              @click="deleteFile"
+              :disabled="!deletePath || !isConfigValid"
+              :class="{'bg-red-500 hover:bg-red-600': deletePath && isConfigValid, 
+                                    'bg-gray-300': !deletePath || !isConfigValid}"
+              class="py-2 px-4 text-white rounded-lg transition-colors"
+            >
+              确认删除
+            </button>
+          </div>
+
+          <!-- 重命名面板 -->
+          <div x-show="activeTab === 'rename'" class="space-y-4">
+            <div
+              class="flex items-start p-4 mb-4 text-sm rounded-lg sm:items-center text-fg-warning bg-orange-400/20"
+              role="alert"
+            >
+              <svg
+                class="mt-0.5 w-4 h-4 sm:mt-0 me-2 shrink-0"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <p>
+                <span class="font-medium me-1"> 注意 </span>
+                重命名会下载原始文件, 重命名后重新上传, 请避免不必要的流量消耗!
+              </p>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="input-with-clear">
+                <label class="block text-sm font-medium text-gray-700"
+                >原文件路径</label>
+                <input
+                  type="text"
+                  x-model="renameOldPath"
+                  placeholder="folder/old-file.txt"
+                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="renameOldPath"
+                  @click="renameOldPath = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+              <div class="input-with-clear">
+                <label class="block text-sm font-medium text-gray-700"
+                >新文件路径</label>
+                <input
+                  type="text"
+                  x-model="renameNewPath"
+                  placeholder="folder/new-file.txt"
+                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+                >
+                <div
+                  x-show="renameNewPath"
+                  @click="renameNewPath = ''"
+                  class="input-clear-btn"
+                >
+                </div>
+              </div>
+            </div>
+            <button
+              @click="renameFile"
+              :disabled="!renameOldPath || !renameNewPath || !isConfigValid"
+              :class="{'bg-blue-500 hover:bg-blue-600': renameOldPath && renameNewPath && isConfigValid, 
+                                    'bg-gray-300': !renameOldPath || !renameNewPath || !isConfigValid}"
+              class="py-2 px-4 text-white rounded-lg transition-colors"
+            >
+              确认重命名
+            </button>
+          </div>
+
+          <!-- 历史记录面板 -->
+          <div x-show="activeTab === 'history'" class="space-y-4">
+            <div class="flex justify-between items-center">
+              <h3 class="text-lg font-medium">操作历史</h3>
+              <button
+                @click="clearHistory"
+                class="py-1 px-3 text-sm text-white bg-red-500 rounded hover:bg-red-600"
+                x-show="history.length > 0"
+              >
+                清除历史
+              </button>
+            </div>
+
+            <div
+              x-show="history.length === 0"
+              class="py-8 text-center text-gray-500"
+            >
+              暂无操作历史
+            </div>
+
+            <div x-show="history.length > 0" class="space-y-3">
+              <template
+                x-for="(record, index) in history"
+                :key="record.timestamp"
+              >
+                <div class="overflow-hidden rounded-lg border border-gray-200">
+                  <!-- 历史记录头部 -->
+                  <div
+                    class="p-3 bg-gray-50 cursor-pointer"
+                    @click="toggleHistoryDetail(index)"
+                  >
+                    <div
+                      class="flex gap-2 justify-between items-center text-sm"
+                    >
+                      <div class="flex flex-col flex-grow">
+                        <div
+                          class="mb-2 text-sm break-all of-text-ellipsis"
+                          style="--max-line: 2"
+                          x-text="getHistoryTitle(record)"
+                        >
+                        </div>
+                        <div class="flex gap-3 items-center text-xs">
+                          <div
+                            class="py-1 px-2 text-xs font-medium rounded"
+                            :class="getHistoryBadgeClass(record.action)"
+                          >
+                            <span
+                              x-text="getActionText(record.action)"
+                            ></span>
+                            <span
+                              x-text="record.data.success ? ' ✓' : ' ✗'"
+                            >
+                            </span>
+                          </div>
+                          <div
+                            class="of-auto"
+                            x-text="formatTime(record.timestamp)"
+                          >
+                          </div>
+                          <div
+                            x-text="record.data.size > -1 ? formatFileSize(record.data.size) : ''"
+                          >
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="flex flex-shrink-0 gap-2 items-center text-sm text-gray-500"
+                      >
+                        <div
+                          :class="historyOpenIndex === index ? '' : 'open-collapse-indicator'"
+                        >
+                          <svg
+                            class="w-5 h-5 shrink-0"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="m5 15 7-7 7 7"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 历史记录详情 -->
+                  <div
+                    x-show="historyOpenIndex === index"
+                    x-collapse
+                    class="p-3 border-t"
+                  >
+                    <pre
+                      x-text="JSON.stringify(record, null, 2)"
+                      class="text-xs whitespace-pre-wrap"
+                    ></pre>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"
+    ></script>
+
+    <!-- 模块脚本，暴露到window -->
+    <script type="module" src="github-api.js"></script>
+    <script type="module" src="components.js"></script>
+
+    <!-- 非模块脚本，使用window上的对象 -->
+    <script src="manager.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </body>
+</html>

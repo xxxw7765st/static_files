@@ -317,7 +317,9 @@ const fileOperations = [
         return [pathname, file];
       }
       if (file.size > 500_000_000) {
-        const res = await Confirm.show("警告：视频过大，可能会出现内存问题，确认继续吗？");
+        const res = await Confirm.show(
+          "警告：视频过大，可能会出现内存问题，确认继续吗？",
+        );
         if (!res) {
           return [pathname, file];
         }

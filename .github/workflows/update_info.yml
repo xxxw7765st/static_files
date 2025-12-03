@@ -114,18 +114,9 @@ jobs:
 
       - name: After updating info
         if: ${{ steps.get_pending_count.outputs.pending_count == '0' }}
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          # repo: current
-          target_branch: dist
-          keep_history: false
-          build_dir: .
-          follow_symlinks: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # run: |
-        #   git config --global user.name "GitHub Actions"
-        #   git config --global user.email "actions@github.com"
-        #   AUTO_COMMIT_HASH=$(git rev-parse HEAD)
-        #   TARGET_REMOTE_BRANCH="refs/heads/dist"
-        #   git push -f origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          AUTO_COMMIT_HASH=$(git rev-parse HEAD)
+          TARGET_REMOTE_BRANCH="refs/heads/dist"
+          git push --force origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"

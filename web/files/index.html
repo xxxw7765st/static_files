@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文件浏览器</title>
     <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://s4.zstatic.net/npm/@tailwindcss/browser@4"></script>
     <!-- Font Awesome 图标 -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       crossorigin="anonymous"
     >
     <!-- Alpine.js -->
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      src="https://s4.zstatic.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <style>
       .file-item, .folder-item {
@@ -28,7 +28,7 @@
         background-color: color-mix(in srgb, dodgerblue 20%, transparent);
       }
       .file-item:hover {
-        background-color: color-mix(in srgb, gray 20%, transparent);
+        background-color: color-mix(in srgb, gray 10%, transparent);
       }
       .breadcrumb a {
         transition: color 0.2s;
@@ -54,7 +54,7 @@
 
       <!-- 面包屑导航 -->
       <div
-        class="flex items-center mb-6 space-x-2 text-sm text-gray-600 breadcrumb"
+        class="flex flex-wrap items-center mb-6 space-x-2 text-sm text-gray-600 breadcrumb"
       >
         <template x-for="(item, index) in breadcrumbItems" :key="index">
           <div class="flex items-center">
@@ -75,7 +75,7 @@
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
         <!-- 标题栏 -->
         <div
-          class="grid grid-cols-12 gap-4 p-4 text-sm font-medium text-gray-500 border-b border-gray-200"
+          class="grid grid-cols-12 gap-4 p-4 px-6 text-sm font-medium text-gray-500 border-b border-gray-200"
         >
           <div class="col-span-6">名称</div>
           <div class="col-span-3 text-right">修改日期</div>
@@ -83,14 +83,14 @@
         </div>
 
         <!-- 文件夹和文件列表 -->
-        <div class="py-4 px-1">
+        <div class="py-4 px-4">
           <template x-if="currentFiles.length === 0">
             <div class="py-8 text-center text-gray-500">此文件夹为空</div>
           </template>
 
           <template x-for="item in sortedFiles" :key="item.id">
             <div
-              class="grid grid-cols-12 gap-4 p-3 border-b border-gray-100 cursor-pointer"
+              class="grid grid-cols-12 gap-4 p-2 border-b border-gray-100 cursor-pointer"
               :class="item.type === 'folder' ? 'folder-item' : 'file-item'"
               @click="item.type === 'folder' ? enterFolder(item) : showDetails(item)"
               :data-item-id="item.id"
@@ -101,19 +101,19 @@
                   class="mr-3 fas"
                   :class="item.type === 'folder' ? 'fa-folder text-yellow-500' : getFileIcon(item.name)"
                 ></i>
-                <span class="truncate" x-text="item.name"></span>
+                <span class="truncate" x-text="getFileName(item)"></span>
               </div>
 
               <!-- 修改日期 -->
               <div
-                class="col-span-3 text-sm text-right text-gray-500 of-scroll"
+                class="col-span-3 text-xs justify-end text-gray-500 of-scroll flex items-center"
                 style="white-space: nowrap; overflow: auto"
                 x-text="formatShortDate(item.updated_at || item.last_modified_at)"
               >
               </div>
 
               <!-- 大小 -->
-              <div class="col-span-3 text-sm text-right text-gray-500">
+              <div class="col-span-3 text-xs justify-end text-gray-500 flex items-center">
                 <span
                   x-text="formatFileSize(item.type === 'folder' ? (item.size || item.total_size_bytes || 0) : (item.size || item.size_bytes || 0))"
                 ></span>
@@ -142,7 +142,7 @@
                   <div class="font-medium" x-text="detailItem.name"></div>
                   <div
                     class="text-xs text-gray-400"
-                    x-text="detailItem.relative_path"
+                    x-text="getFileWebPath(detailItem)"
                   >
                   </div>
                 </div>
@@ -228,7 +228,7 @@
                         target="_blank"
                       >
                         <i class="fas fa-circle-plus"></i>
-                        打开
+                        新建文件
                       </a>
                     </template>
                   </div>
@@ -447,36 +447,42 @@
             if (index === 0) {
               this.pathStack = [];
               this.currentFiles = this.folderData.files;
+              this.detailItem = null;
             } else {
               this.pathStack = this.pathStack.slice(0, index);
 
-              this.currentFiles = this.getFilesAtPath(this.pathStack);
+              const folder = this.getFolderAtPath(this.pathStack);
+              this.currentFiles = folder?.children || [];
+              this.detailItem = folder;
             }
-
-            this.detailItem = null;
           },
 
-          getFilesAtPath(path) {
-            let currentFiles = this.folderData.files;
+          getFolderAtPath(path) {
+            let currentFolder = this.folderData;
 
             for (const pathItem of path) {
-              const folder = currentFiles.find((f) =>
+              const children = currentFolder.files ||
+                currentFolder.children || [];
+              const folder = children.find((f) =>
                 f.type === "folder" && f.name === pathItem.name
               );
               if (folder) {
-                currentFiles = folder.children || [];
+                currentFolder = folder;
               } else {
                 break;
               }
             }
-
-            return currentFiles;
+            return currentFolder;
           },
 
           showDetails(item) {
             this.detailItem = item;
           },
 
+          getFileName(file) {
+            const name = file.name || "???";
+            return name.replace(/_H[0-9a-zA-Z]{8}_/g, "");
+          },
           getFileWebPath(file) {
             return `${file.web_prefix || ""}${file.relative_path}`;
           },

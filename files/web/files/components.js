@@ -310,6 +310,52 @@ const fileOperations = [
     },
   },
   {
+    name: "mp4视频优化",
+    do: async (pathname, file) => {
+      if (file.type !== "video/mp4") {
+        Modal.show("仅支持 mp4 文件");
+        return [pathname, file];
+      }
+      if (file.size > 500_000_000) {
+        const res = await Confirm.show("警告：视频过大，可能会出现内存问题，确认继续吗？");
+        if (!res) {
+          return [pathname, file];
+        }
+      }
+      const {
+        Input,
+        BlobSource,
+        Output,
+        Mp4OutputFormat,
+        MP4,
+        BufferTarget,
+        Conversion,
+      } = await import(
+        "https://esm.sh/mediabunny@latest"
+      );
+      const input = new Input({
+        source: new BlobSource(file),
+        formats: [MP4],
+      });
+      const output = new Output({
+        format: new Mp4OutputFormat({
+          fastStart: "in-memory",
+        }),
+        target: new BufferTarget(),
+      });
+      const conversion = await Conversion.init({ input, output });
+      await conversion.execute();
+      const { buffer } = output.target;
+
+      return [
+        pathname,
+        new Blob([buffer], {
+          type: file.type || "video/mp4",
+        }),
+      ];
+    },
+  },
+  {
     name: "哈希文件名",
     do: async (pathname, file) => {
       const { hash_name } = await calc_file_sha256(file);

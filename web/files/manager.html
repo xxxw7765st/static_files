@@ -192,6 +192,19 @@
                 >
                 </div>
               </div>
+              <div class="opacity-80" x-if="prefix_suggestions?.length > 0">
+                <div> prefix 提示 </div>
+                <div class="flex gap-2 py-2 px-3 of-auto">
+                  <template x-for="item in prefix_suggestions">
+                    <button
+                      class="px-2 rounded-xl border-2"
+                      x-text="item.name"
+                      @click="config.prefix = item.path_prefix"
+                    >
+                    </button>
+                  </template>
+                </div>
+              </div>
             </div>
             <div class="flex gap-2 mt-4">
               <button

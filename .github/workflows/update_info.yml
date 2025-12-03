@@ -121,6 +121,8 @@ jobs:
           keep_history: false
           build_dir: .
           follow_symlinks: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # run: |
         #   git config --global user.name "GitHub Actions"
         #   git config --global user.email "actions@github.com"

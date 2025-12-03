@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>文件浏览器</title>
     <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://s4.zstatic.net/npm/@tailwindcss/browser@4"></script>
     <!-- Font Awesome 图标 -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       crossorigin="anonymous"
     >
     <!-- Alpine.js -->
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      src="https://s4.zstatic.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
     <style>
       .file-item, .folder-item {
@@ -101,7 +101,7 @@
                   class="mr-3 fas"
                   :class="item.type === 'folder' ? 'fa-folder text-yellow-500' : getFileIcon(item.name)"
                 ></i>
-                <span class="truncate" x-text="item.name"></span>
+                <span class="truncate" x-text="getFileName(item)"></span>
               </div>
 
               <!-- 修改日期 -->
@@ -228,7 +228,7 @@
                         target="_blank"
                       >
                         <i class="fas fa-circle-plus"></i>
-                        打开
+                        新建文件
                       </a>
                     </template>
                   </div>
@@ -447,36 +447,41 @@
             if (index === 0) {
               this.pathStack = [];
               this.currentFiles = this.folderData.files;
+              this.detailItem = null;
             } else {
               this.pathStack = this.pathStack.slice(0, index);
 
-              this.currentFiles = this.getFilesAtPath(this.pathStack);
+              const folder = this.getFolderAtPath(this.pathStack);
+              this.currentFiles = folder?.children || [];
+              this.detailItem = folder;
             }
-
-            this.detailItem = null;
           },
 
-          getFilesAtPath(path) {
-            let currentFiles = this.folderData.files;
+          getFolderAtPath(path) {
+            let currentFolder = this.folderData;
 
             for (const pathItem of path) {
-              const folder = currentFiles.find((f) =>
+              const children = currentFolder.files || currentFolder.children || []
+              const folder = children.find((f) =>
                 f.type === "folder" && f.name === pathItem.name
               );
               if (folder) {
-                currentFiles = folder.children || [];
+                currentFolder = folder;
               } else {
                 break;
               }
             }
-
-            return currentFiles;
+            return currentFolder;
           },
 
           showDetails(item) {
             this.detailItem = item;
           },
 
+          getFileName(file) {
+            const name = file.name || "???";
+            return name.replace(/_H[0-9a-zA-Z]{8}_/g, "");
+          },
           getFileWebPath(file) {
             return `${file.web_prefix || ""}${file.relative_path}`;
           },

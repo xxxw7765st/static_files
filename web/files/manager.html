@@ -4,25 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub文件管理器</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+    <script src="https://s4.zstatic.net/npm/@tailwindcss/browser@4"></script>
     <style>
       button {
         border-radius: 0.5rem;
+        transition: all 0.2s ease-in-out;
       }
 
       .open-collapse-indicator {
         rotate: 180deg;
+        transition: rotate 0.3s ease;
       }
 
       .file-item {
         border-bottom: 1px solid #e5e7eb;
         padding-top: 0.75rem;
         padding-bottom: 0.75rem;
+        transition: all 0.2s ease;
       }
 
       .of-text-ellipsis {
@@ -66,39 +64,73 @@
         position: relative;
       }
       .input-with-clear input {
+        outline-color: royalblue;
         padding-right: 2rem; /* 为清空按钮留出空间 */
+      }
+      .hover-light:hover {
+        opacity: 60%;
+      }
+      .hover-shadow:hover {
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: box-shadow 0.3s ease;
       }
     </style>
   </head>
-  <body class="min-h-screen bg-gray-50">
+  <body class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
     <div
       x-data="githubFileManager()"
-      class="container py-6 px-4 mx-auto max-w-4xl"
+      class="container py-8 px-4 mx-auto max-w-4xl"
     >
-      <header class="mb-6 text-center">
+      <header class="mb-8 text-center">
         <h1
-          class="text-3xl"
+          class="mb-2 text-4xl font-bold"
           style="background: linear-gradient(90deg, #58a6ff, #f778ba); -webkit-background-clip: text; -webkit-text-fill-color: transparent"
         >
           GitHub文件管理器
         </h1>
       </header>
+
       <!-- 配置面板 -->
-      <div class="mb-6 rounded-lg border shadow-md">
-        <div class="p-4 border-b">
+      <div class="mb-6 bg-white rounded-xl border border-gray-200 shadow-lg">
+        <div class="p-4 border-b border-gray-100">
           <h2
-            class="flex justify-between items-center text-lg font-semibold cursor-pointer"
+            class="flex justify-between items-center text-lg font-semibold transition-colors cursor-pointer"
             @click="toggleConfigPanel"
           >
-            <span>配置
+            <span class="flex items-center">
+              <svg
+                class="mr-2 w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                >
+                </path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                >
+                </path>
+              </svg>
+              配置
               <span
                 x-text="`(${config.owner}/${config.repo})`"
-                class="text-sm text-gray-500"
+                class="ml-2 text-sm text-gray-500"
               ></span>
             </span>
             <svg
               :class="configPanelOpen ? '' : 'open-collapse-indicator'"
-              class="w-5 h-5 shrink-0"
+              class="w-5 h-5 text-gray-500 shrink-0"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -123,7 +155,7 @@
                 <input
                   type="password"
                   x-model="config.pat"
-                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="config.pat"
@@ -138,7 +170,7 @@
                 <input
                   type="text"
                   x-model="config.owner"
-                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="config.owner"
@@ -153,7 +185,7 @@
                 <input
                   type="text"
                   x-model="config.repo"
-                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="config.repo"
@@ -168,7 +200,7 @@
                 <input
                   type="text"
                   x-model="config.branch"
-                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="config.branch"
@@ -183,7 +215,7 @@
                 <input
                   type="text"
                   x-model="config.prefix"
-                  class="py-2 px-3 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="config.prefix"
@@ -193,11 +225,13 @@
                 </div>
               </div>
               <div class="opacity-80" x-show="prefix_suggestions?.length > 0">
-                <div>prefix 提示</div>
-                <div class="flex gap-2 py-2 px-3 of-auto">
+                <div class="mb-1 text-sm font-medium text-gray-700">
+                  prefix 提示
+                </div>
+                <div class="flex overflow-auto gap-2 py-2 px-3">
                   <template x-for="item in prefix_suggestions">
                     <button
-                      class="px-2 rounded-xl border-2"
+                      class="py-1 px-3 text-blue-700 bg-blue-50 rounded-lg border-2 border-blue-200 transition hover-light"
                       x-text="item.name"
                       @click="config.prefix = item.path_prefix"
                     >
@@ -209,25 +243,25 @@
             <div class="flex gap-2 mt-4">
               <button
                 @click="saveConfig"
-                class="py-2 px-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                class="py-2 px-4 text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-sm hover-light"
               >
                 保存
               </button>
               <button
                 @click="loadConfig"
-                class="py-2 px-4 text-white bg-gray-500 rounded-lg hover:bg-gray-600"
+                class="py-2 px-4 text-white bg-gradient-to-r from-gray-500 to-gray-600 rounded-lg shadow-sm hover-light"
               >
                 加载
               </button>
               <button
                 @click="clearConfig"
-                class="py-2 px-4 text-white bg-red-500 rounded-lg hover:bg-red-600"
+                class="py-2 px-4 text-white bg-gradient-to-r from-red-500 to-red-600 rounded-lg shadow-sm hover-light"
               >
                 清除
               </button>
               <button
                 @click="openGithub"
-                class="py-2 px-4 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                class="py-2 px-4 text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-sm hover-light"
               >
                 Github
               </button>
@@ -237,15 +271,17 @@
       </div>
 
       <!-- 行为面板 -->
-      <div class="rounded-lg border shadow-md">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-lg">
         <!-- Tab导航 -->
-        <div class="p-4 border-b">
-          <nav class="flex overflow-x-auto justify-between">
+        <div class="p-4 border-b border-gray-100">
+          <nav class="flex overflow-x-auto justify-between md:justify-around">
             <template x-for="tab in tabs">
               <button
                 @click="activeTab = tab.id"
-                :class="activeTab === tab.id ? 'bg-blue-600 text-white' : 'text-gray-500 hover:text-gray-700'"
-                class="py-2 px-3 text-sm font-medium whitespace-nowrap"
+                :class="activeTab === tab.id ? 
+                  'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow' : 
+                  'text-gray-500 hover-light'"
+                class="py-2 px-4 text-sm font-medium whitespace-nowrap rounded-lg transition-all"
                 x-text="tab.name"
               >
               </button>
@@ -268,17 +304,32 @@
                 >
                 <button
                   @click="document.getElementById('fileInput').click()"
-                  class="py-2 px-4 text-white bg-green-500 rounded-lg hover:bg-green-600"
+                  class="flex items-center py-2 px-4 text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-sm hover-light"
                 >
+                  <svg
+                    class="mr-2 w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    >
+                    </path>
+                  </svg>
                   选择文件
                 </button>
 
                 <span
-                  class="flex items-center px-3 ml-auto text-sm text-gray-500"
+                  class="flex items-center py-1 px-3 ml-auto text-sm text-gray-500 bg-gray-100 rounded-lg"
                 >
-                  数量 :
+                  文件数量:
                   <span
-                    class="pl-2"
+                    class="pl-2 font-medium"
                     x-text="uploadFiles.length"
                   ></span>
                 </span>
@@ -288,7 +339,7 @@
               <div x-show="uploadFiles.length > 0" class="space-y-3">
                 <template x-for="(file, index) in uploadFiles" :key="file.id">
                   <div
-                    class="p-3 bg-gray-50 rounded-lg file-item"
+                    class="p-4 bg-gray-50 rounded-lg transition hover-shadow"
                     :class="{'border-l-4': file.status, 
                                                                                       'border-green-500': file.status === 'success',
                                                                                       'border-red-500': file.status === 'error'}"
@@ -301,7 +352,7 @@
                           x-model="file.name"
                           :placeholder="file.origin_file.name"
                           :disabled="file.status === 'success'"
-                          class="py-2 px-3 w-full text-sm rounded-lg border border-gray-300"
+                          class="py-2 px-3 w-full text-sm rounded-lg border border-gray-300 transition"
                         >
                         <div
                           x-show="file.name && file.status !== 'success'"
@@ -312,7 +363,7 @@
                       </div>
                       <div
                         x-show="file.status"
-                        class="py-1 px-2 text-xs rounded"
+                        class="py-1 px-2 text-xs font-medium rounded"
                         :class="file.status === 'success' ? 'bg-green-100 text-green-800' : 
                                                      file.status === 'error' ? 'bg-red-100 text-red-800' : ''"
                       >
@@ -337,7 +388,7 @@
                         <!-- 重置更改 -->
                         <button
                           @click="resetFile(index)"
-                          class="py-1 px-3 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
+                          class="py-1 px-3 text-sm text-gray-600 bg-gray-100 rounded transition hover-shadow"
                           x-show="file.name !== file.origin_file.name || file.file !== file.origin_file"
                         >
                           重置
@@ -346,7 +397,7 @@
                         <!-- 文件操作按钮 -->
                         <button
                           @click="showFileOperations(index)"
-                          class="py-1 px-3 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200"
+                          class="py-1 px-3 text-sm text-blue-600 bg-blue-100 rounded transition hover-shadow"
                         >
                           操作
                         </button>
@@ -354,7 +405,7 @@
                         <!-- 删除文件 -->
                         <button
                           @click="removeFile(index)"
-                          class="py-1 px-3 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200"
+                          class="py-1 px-3 text-sm text-red-600 bg-red-100 rounded transition hover-shadow"
                         >
                           删除
                         </button>
@@ -366,9 +417,9 @@
                 <button
                   @click="uploadAllFiles"
                   :disabled="!isConfigValid || uploadFiles.length === 0"
-                  :class="{'bg-green-500 hover:bg-green-600': isConfigValid && uploadFiles.length > 0, 
-                                            'bg-gray-300': !isConfigValid || uploadFiles.length === 0}"
-                  class="py-2 px-4 w-full text-white rounded-lg transition-colors"
+                  :class="{'bg-gradient-to-r from-green-500 to-green-600 hover-light shadow-sm': isConfigValid && uploadFiles.length > 0, 
+                                            'bg-gray-300 cursor-not-allowed': !isConfigValid || uploadFiles.length === 0}"
+                  class="py-3 px-4 w-full font-medium text-white rounded-lg transition-all"
                 >
                   确认上传
                 </button>
@@ -376,9 +427,24 @@
 
               <div
                 x-show="uploadFiles.length === 0"
-                class="py-8 text-center text-gray-500 rounded-lg border-2"
+                class="py-12 text-center text-gray-500 rounded-lg border-2 border-gray-300 border-dashed"
               >
-                暂无文件，请点击上方按钮选择文件
+                <svg
+                  class="mx-auto w-12 h-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                  >
+                  </path>
+                </svg>
+                <p class="mt-2">暂无文件，请点击上方按钮选择文件</p>
               </div>
             </div>
           </div>
@@ -392,7 +458,7 @@
                 type="text"
                 x-model="deletePath"
                 placeholder="folder/file.txt"
-                class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+                class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300 transition"
               >
               <div
                 x-show="deletePath"
@@ -404,9 +470,9 @@
             <button
               @click="deleteFile"
               :disabled="!deletePath || !isConfigValid"
-              :class="{'bg-red-500 hover:bg-red-600': deletePath && isConfigValid, 
-                                    'bg-gray-300': !deletePath || !isConfigValid}"
-              class="py-2 px-4 text-white rounded-lg transition-colors"
+              :class="{'bg-gradient-to-r from-red-500 to-red-600 hover-light shadow-sm': deletePath && isConfigValid, 
+                                    'bg-gray-300 cursor-not-allowed': !deletePath || !isConfigValid}"
+              class="py-2 px-4 font-medium text-white rounded-lg transition-all"
             >
               确认删除
             </button>
@@ -415,11 +481,11 @@
           <!-- 重命名面板 -->
           <div x-show="activeTab === 'rename'" class="space-y-4">
             <div
-              class="flex items-start p-4 mb-4 text-sm rounded-lg sm:items-center text-fg-warning bg-orange-400/20"
+              class="flex items-start p-4 mb-4 text-sm bg-orange-50 rounded-lg border border-orange-200"
               role="alert"
             >
               <svg
-                class="mt-0.5 w-4 h-4 sm:mt-0 me-2 shrink-0"
+                class="mt-0.5 w-4 h-4 text-orange-500 sm:mt-0 me-2 shrink-0"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -435,7 +501,7 @@
                   d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
-              <p>
+              <p class="text-orange-700">
                 <span class="font-medium me-1"> 注意 </span>
                 重命名会下载原始文件, 重命名后重新上传, 请避免不必要的流量消耗!
               </p>
@@ -448,7 +514,7 @@
                   type="text"
                   x-model="renameOldPath"
                   placeholder="folder/old-file.txt"
-                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="renameOldPath"
@@ -464,7 +530,7 @@
                   type="text"
                   x-model="renameNewPath"
                   placeholder="folder/new-file.txt"
-                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300"
+                  class="py-2 px-3 mt-1 w-full rounded-lg border border-gray-300 transition"
                 >
                 <div
                   x-show="renameNewPath"
@@ -477,9 +543,9 @@
             <button
               @click="renameFile"
               :disabled="!renameOldPath || !renameNewPath || !isConfigValid"
-              :class="{'bg-blue-500 hover:bg-blue-600': renameOldPath && renameNewPath && isConfigValid, 
-                                    'bg-gray-300': !renameOldPath || !renameNewPath || !isConfigValid}"
-              class="py-2 px-4 text-white rounded-lg transition-colors"
+              :class="{'bg-gradient-to-r from-blue-500 to-blue-600 hover-light shadow-sm': renameOldPath && renameNewPath && isConfigValid, 
+                                    'bg-gray-300 cursor-not-allowed': !renameOldPath || !renameNewPath || !isConfigValid}"
+              class="py-2 px-4 font-medium text-white rounded-lg transition-all"
             >
               确认重命名
             </button>
@@ -488,21 +554,68 @@
           <!-- 历史记录面板 -->
           <div x-show="activeTab === 'history'" class="space-y-4">
             <div class="flex justify-between items-center">
-              <h3 class="text-lg font-medium">操作历史</h3>
+              <h3 class="flex items-center text-lg font-medium">
+                <svg
+                  class="mr-2 w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  >
+                  </path>
+                </svg>
+                操作历史
+              </h3>
               <button
                 @click="clearHistory"
-                class="py-1 px-3 text-sm text-white bg-red-500 rounded hover:bg-red-600"
+                class="flex items-center py-1 px-3 text-sm text-white bg-gradient-to-r from-red-500 to-red-600 rounded shadow-sm transition hover-light"
                 x-show="history.length > 0"
               >
+                <svg
+                  class="mr-1 w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  >
+                  </path>
+                </svg>
                 清除历史
               </button>
             </div>
 
             <div
               x-show="history.length === 0"
-              class="py-8 text-center text-gray-500"
+              class="py-12 text-center text-gray-500 rounded-lg border-2 border-gray-300 border-dashed"
             >
-              暂无操作历史
+              <svg
+                class="mx-auto w-12 h-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
+              </svg>
+              <p class="mt-2">暂无操作历史</p>
             </div>
 
             <div x-show="history.length > 0" class="space-y-3">
@@ -510,10 +623,12 @@
                 x-for="(record, index) in history"
                 :key="record.timestamp"
               >
-                <div class="overflow-hidden rounded-lg border border-gray-200">
+                <div
+                  class="overflow-hidden rounded-lg border border-gray-200 transition hover-shadow"
+                >
                   <!-- 历史记录头部 -->
                   <div
-                    class="p-3 bg-gray-50 cursor-pointer"
+                    class="p-3 bg-gray-50 transition cursor-pointer"
                     @click="toggleHistoryDetail(index)"
                   >
                     <div
@@ -582,11 +697,11 @@
                   <div
                     x-show="historyOpenIndex === index"
                     x-collapse
-                    class="p-3 border-t"
+                    class="p-3 border-t border-gray-100"
                   >
                     <pre
                       x-text="JSON.stringify(record, null, 2)"
-                      class="text-xs whitespace-pre-wrap"
+                      class="overflow-auto p-3 max-h-60 text-xs whitespace-pre-wrap bg-gray-50 rounded-lg"
                     ></pre>
                   </div>
                 </div>
@@ -597,10 +712,6 @@
       </div>
     </div>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"
-    ></script>
-
     <!-- 模块脚本，暴露到window -->
     <script type="module" src="github-api.js"></script>
     <script type="module" src="components.js"></script>
@@ -609,11 +720,11 @@
     <script src="manager.js"></script>
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
+      src="https://s4.zstatic.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"
     ></script>
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      src="https://s4.zstatic.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </body>
 </html>

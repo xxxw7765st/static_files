@@ -1,0 +1,722 @@
+{
+  // 代码文件 - 蓝色系
+  "json": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "jsonc": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "js": {
+    "icon": "fa-file-code",
+    "color": "text-yellow-500"
+  },
+  "jsx": {
+    "icon": "fa-file-code",
+    "color": "text-blue-400"
+  },
+  "ts": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "tsx": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "vue": {
+    "icon": "fa-file-code",
+    "color": "text-green-500"
+  },
+  "svelte": {
+    "icon": "fa-file-code",
+    "color": "text-orange-500"
+  },
+  "html": {
+    "icon": "fa-file-code",
+    "color": "text-orange-600"
+  },
+  "htm": {
+    "icon": "fa-file-code",
+    "color": "text-orange-600"
+  },
+  "css": {
+    "icon": "fa-file-code",
+    "color": "text-blue-400"
+  },
+  "scss": {
+    "icon": "fa-file-code",
+    "color": "text-pink-500"
+  },
+  "sass": {
+    "icon": "fa-file-code",
+    "color": "text-pink-500"
+  },
+  "less": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "stylus": {
+    "icon": "fa-file-code",
+    "color": "text-green-600"
+  },
+  "py": {
+    "icon": "fa-file-code",
+    "color": "text-yellow-500"
+  },
+  "java": {
+    "icon": "fa-file-code",
+    "color": "text-red-600"
+  },
+  "cpp": {
+    "icon": "fa-file-code",
+    "color": "text-blue-700"
+  },
+  "c": {
+    "icon": "fa-file-code",
+    "color": "text-blue-700"
+  },
+  "h": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "cs": {
+    "icon": "fa-file-code",
+    "color": "text-purple-600"
+  },
+  "php": {
+    "icon": "fa-file-code",
+    "color": "text-purple-500"
+  },
+  "rb": {
+    "icon": "fa-file-code",
+    "color": "text-red-600"
+  },
+  "go": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "rs": {
+    "icon": "fa-file-code",
+    "color": "text-orange-600"
+  },
+  "swift": {
+    "icon": "fa-file-code",
+    "color": "text-orange-500"
+  },
+  "kt": {
+    "icon": "fa-file-code",
+    "color": "text-purple-500"
+  },
+  "scala": {
+    "icon": "fa-file-code",
+    "color": "text-red-500"
+  },
+  "pl": {
+    "icon": "fa-file-code",
+    "color": "text-blue-400"
+  },
+  "pm": {
+    "icon": "fa-file-code",
+    "color": "text-blue-400"
+  },
+  "r": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "dart": {
+    "icon": "fa-file-code",
+    "color": "text-blue-400"
+  },
+  "lua": {
+    "icon": "fa-file-code",
+    "color": "text-blue-700"
+  },
+  "hs": {
+    "icon": "fa-file-code",
+    "color": "text-purple-500"
+  },
+  "sql": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "xml": {
+    "icon": "fa-file-code",
+    "color": "text-green-600"
+  },
+  "toml": {
+    "icon": "fa-file-code",
+    "color": "text-green-600"
+  },
+  "yaml": {
+    "icon": "fa-file-code",
+    "color": "text-red-500"
+  },
+  "yml": {
+    "icon": "fa-file-code",
+    "color": "text-red-500"
+  },
+  "sh": {
+    "icon": "fa-file-code",
+    "color": "text-green-600"
+  },
+  "bash": {
+    "icon": "fa-file-code",
+    "color": "text-green-600"
+  },
+  "zsh": {
+    "icon": "fa-file-code",
+    "color": "text-green-500"
+  },
+  "fish": {
+    "icon": "fa-file-code",
+    "color": "text-green-500"
+  },
+  "bat": {
+    "icon": "fa-file-code",
+    "color": "text-green-700"
+  },
+  "cmd": {
+    "icon": "fa-file-code",
+    "color": "text-green-700"
+  },
+  "ps1": {
+    "icon": "fa-file-code",
+    "color": "text-blue-700"
+  },
+  "psm1": {
+    "icon": "fa-file-code",
+    "color": "text-blue-600"
+  },
+  "md": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "markdown": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "dockerfile": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "makefile": {
+    "icon": "fa-file-code",
+    "color": "text-yellow-600"
+  },
+  "env": {
+    "icon": "fa-file-code",
+    "color": "text-gray-600"
+  },
+  "gitignore": {
+    "icon": "fa-file-code",
+    "color": "text-red-500"
+  },
+  "gitattributes": {
+    "icon": "fa-file-code",
+    "color": "text-red-500"
+  },
+  "editorconfig": {
+    "icon": "fa-file-code",
+    "color": "text-blue-500"
+  },
+  "eslintrc": {
+    "icon": "fa-file-code",
+    "color": "text-purple-500"
+  },
+  "prettierrc": {
+    "icon": "fa-file-code",
+    "color": "text-orange-500"
+  },
+  "babelrc": {
+    "icon": "fa-file-code",
+    "color": "text-yellow-500"
+  },
+  "eslintignore": {
+    "icon": "fa-file-code",
+    "color": "text-purple-500"
+  },
+  // 文档文件 - 紫色/蓝色系
+  "pdf": {
+    "icon": "fa-file-pdf",
+    "color": "text-red-500"
+  },
+  "doc": {
+    "icon": "fa-file-word",
+    "color": "text-blue-600"
+  },
+  "docx": {
+    "icon": "fa-file-word",
+    "color": "text-blue-600"
+  },
+  "xls": {
+    "icon": "fa-file-excel",
+    "color": "text-green-600"
+  },
+  "xlsx": {
+    "icon": "fa-file-excel",
+    "color": "text-green-600"
+  },
+  "ppt": {
+    "icon": "fa-file-powerpoint",
+    "color": "text-orange-600"
+  },
+  "pptx": {
+    "icon": "fa-file-powerpoint",
+    "color": "text-orange-600"
+  },
+  "txt": {
+    "icon": "fa-file-lines",
+    "color": "text-blue-600"
+  },
+  "rtf": {
+    "icon": "fa-file-lines",
+    "color": "text-blue-600"
+  },
+  "odt": {
+    "icon": "fa-file-word",
+    "color": "text-blue-500"
+  },
+  "ods": {
+    "icon": "fa-file-excel",
+    "color": "text-green-500"
+  },
+  "odp": {
+    "icon": "fa-file-powerpoint",
+    "color": "text-orange-500"
+  },
+  "epub": {
+    "icon": "fa-book",
+    "color": "text-purple-500"
+  },
+  "mobi": {
+    "icon": "fa-book",
+    "color": "text-orange-500"
+  },
+  "azw": {
+    "icon": "fa-book",
+    "color": "text-blue-500"
+  },
+  "pages": {
+    "icon": "fa-file-word",
+    "color": "text-gray-600"
+  },
+  "numbers": {
+    "icon": "fa-file-excel",
+    "color": "text-gray-600"
+  },
+  "key": {
+    "icon": "fa-file-powerpoint",
+    "color": "text-gray-600"
+  },
+  // 图片文件 - 绿色系
+  "ico": {
+    "icon": "fa-file-image",
+    "color": "text-purple-500"
+  },
+  "jpg": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "jpeg": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "png": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "gif": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "bmp": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "svg": {
+    "icon": "fa-file-image",
+    "color": "text-orange-500"
+  },
+  "webp": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "tiff": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "tif": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "psd": {
+    "icon": "fa-file-image",
+    "color": "text-blue-500"
+  },
+  "ai": {
+    "icon": "fa-file-image",
+    "color": "text-orange-600"
+  },
+  "eps": {
+    "icon": "fa-file-image",
+    "color": "text-purple-500"
+  },
+  "raw": {
+    "icon": "fa-file-image",
+    "color": "text-gray-600"
+  },
+  "heic": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "heif": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "avif": {
+    "icon": "fa-file-image",
+    "color": "text-green-500"
+  },
+  "indd": {
+    "icon": "fa-file-image",
+    "color": "text-pink-500"
+  },
+  "sketch": {
+    "icon": "fa-file-image",
+    "color": "text-orange-500"
+  },
+  "fig": {
+    "icon": "fa-file-image",
+    "color": "text-purple-500"
+  },
+  // 音频文件 - 粉色系
+  "mp3": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "wav": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "flac": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-600"
+  },
+  "aac": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "ogg": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "wma": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "m4a": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "aiff": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  "mid": {
+    "icon": "fa-file-audio",
+    "color": "text-purple-500"
+  },
+  "midi": {
+    "icon": "fa-file-audio",
+    "color": "text-purple-500"
+  },
+  "opus": {
+    "icon": "fa-file-audio",
+    "color": "text-pink-500"
+  },
+  // 视频文件 - 红色系
+  "mp4": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "avi": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "mov": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "mkv": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "flv": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "wmv": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "webm": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "m4v": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "3gp": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "mpeg": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "mpg": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "m2ts": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "vob": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  "ogv": {
+    "icon": "fa-file-video",
+    "color": "text-red-500"
+  },
+  // 压缩文件 - 橙色系
+  "zip": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "rar": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "7z": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "tar": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "gz": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "bz2": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "xz": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "lz": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "lzma": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "lz4": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "zst": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "tgz": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  "tbz2": {
+    "icon": "fa-file-zipper",
+    "color": "text-orange-500"
+  },
+  // 系统文件 - 灰色系
+  "exe": {
+    "icon": "fa-gear",
+    "color": "text-gray-500"
+  },
+  "dll": {
+    "icon": "fa-puzzle-piece",
+    "color": "text-gray-500"
+  },
+  "ini": {
+    "icon": "fa-gear",
+    "color": "text-gray-500"
+  },
+  "cfg": {
+    "icon": "fa-gear",
+    "color": "text-gray-500"
+  },
+  "conf": {
+    "icon": "fa-gear",
+    "color": "text-gray-500"
+  },
+  "log": {
+    "icon": "fa-file-lines",
+    "color": "text-gray-500"
+  },
+  "sys": {
+    "icon": "fa-gear",
+    "color": "text-gray-500"
+  },
+  "drv": {
+    "icon": "fa-puzzle-piece",
+    "color": "text-gray-500"
+  },
+  "bak": {
+    "icon": "fa-file-export",
+    "color": "text-gray-500"
+  },
+  "tmp": {
+    "icon": "fa-hourglass",
+    "color": "text-gray-500"
+  },
+  // 字体文件
+  "ttf": {
+    "icon": "fa-font",
+    "color": "text-purple-500"
+  },
+  "otf": {
+    "icon": "fa-font",
+    "color": "text-purple-500"
+  },
+  "woff": {
+    "icon": "fa-font",
+    "color": "text-purple-500"
+  },
+  "woff2": {
+    "icon": "fa-font",
+    "color": "text-purple-500"
+  },
+  "eot": {
+    "icon": "fa-font",
+    "color": "text-purple-500"
+  },
+  // 数据文件
+  "csv": {
+    "icon": "fa-file-csv",
+    "color": "text-green-600"
+  },
+  "db": {
+    "icon": "fa-database",
+    "color": "text-blue-600"
+  },
+  "sqlite": {
+    "icon": "fa-database",
+    "color": "text-blue-600"
+  },
+  "mdb": {
+    "icon": "fa-database",
+    "color": "text-blue-600"
+  },
+  "accdb": {
+    "icon": "fa-database",
+    "color": "text-blue-600"
+  },
+  "parquet": {
+    "icon": "fa-table",
+    "color": "text-blue-500"
+  },
+  "avro": {
+    "icon": "fa-table",
+    "color": "text-blue-500"
+  },
+  "orc": {
+    "icon": "fa-table",
+    "color": "text-blue-500"
+  },
+  // 其他常见文件类型
+  "iso": {
+    "icon": "fa-compact-disc",
+    "color": "text-purple-500"
+  },
+  "apk": {
+    "icon": "fa-mobile",
+    "color": "text-green-500"
+  },
+  "dmg": {
+    "icon": "fa-compact-disc",
+    "color": "text-gray-600"
+  },
+  "deb": {
+    "icon": "fa-box",
+    "color": "text-red-500"
+  },
+  "rpm": {
+    "icon": "fa-box",
+    "color": "text-red-500"
+  },
+  "pkg": {
+    "icon": "fa-box",
+    "color": "text-gray-600"
+  },
+  "msi": {
+    "icon": "fa-gear",
+    "color": "text-gray-600"
+  },
+  "torrent": {
+    "icon": "fa-download",
+    "color": "text-orange-500"
+  },
+  "url": {
+    "icon": "fa-link",
+    "color": "text-blue-500"
+  },
+  "webloc": {
+    "icon": "fa-link",
+    "color": "text-blue-500"
+  },
+  "ics": {
+    "icon": "fa-calendar",
+    "color": "text-red-500"
+  },
+  "vcf": {
+    "icon": "fa-address-card",
+    "color": "text-blue-500"
+  },
+  // 3D模型和设计文件
+  "stl": {
+    "icon": "fa-cube",
+    "color": "text-purple-500"
+  },
+  "obj": {
+    "icon": "fa-cube",
+    "color": "text-purple-500"
+  },
+  "fbx": {
+    "icon": "fa-cube",
+    "color": "text-purple-500"
+  },
+  "blend": {
+    "icon": "fa-cube",
+    "color": "text-orange-500"
+  },
+  "max": {
+    "icon": "fa-cube",
+    "color": "text-gray-600"
+  },
+  "ma": {
+    "icon": "fa-cube",
+    "color": "text-gray-600"
+  },
+  // 默认文件图标
+  "default": {
+    "icon": "fa-file",
+    "color": "text-gray-500"
+  }
+}

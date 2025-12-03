@@ -48,6 +48,25 @@ function githubFileManager() {
       this.loadConfig();
       this.loadHistory();
       this.loadPrefixSuggestion();
+
+      // hash param
+      const url = new URL(window.location.href);
+      let from_path = url.hash?.slice(1);
+      if (from_path) {
+        if (from_path.endsWith("/")) {
+          this.config.prefix = from_path;
+        } else {
+          if (from_path.startsWith(this.config.prefix)) {
+            from_path = from_path.slice(this.config.prefix.length);
+          } else {
+            this.config.prefix = "";
+          }
+          this.renameOldPath = from_path;
+          this.deletePath = from_path;
+        }
+        url.hash = "";
+        window.history.replaceState({}, document.title, url.href);
+      }
     },
 
     // 配置面板方法

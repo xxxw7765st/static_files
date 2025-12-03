@@ -192,8 +192,8 @@
                 >
                 </div>
               </div>
-              <div class="opacity-80" x-if="prefix_suggestions?.length > 0">
-                <div> prefix 提示 </div>
+              <div class="opacity-80" x-show="prefix_suggestions?.length > 0">
+                <div>prefix 提示</div>
                 <div class="flex gap-2 py-2 px-3 of-auto">
                   <template x-for="item in prefix_suggestions">
                     <button

@@ -1,4 +1,3 @@
-// github-api.js - GitHub API封装（模块）
 import { Octokit } from "https://esm.sh/octokit";
 
 class GitHubAPI {

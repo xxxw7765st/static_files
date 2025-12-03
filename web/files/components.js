@@ -1,5 +1,4 @@
 import { calc_file_sha256, format } from "./utils.js";
-import { squish } from "https://esm.sh/picsquish@0.3.0";
 
 class Modal {
   static show(message, title = "info") {
@@ -294,6 +293,7 @@ const fileOperations = [
       if (size !== null) {
         size = Number(size);
         if (size > 10) {
+          const { squish } = await import("https://esm.sh/picsquish@0.3.0");
           const resizer = await squish(file, size);
           const resized = await resizer.toBlob({ type: ft });
           const { dir, name } = format.parse_file_path(pathname);

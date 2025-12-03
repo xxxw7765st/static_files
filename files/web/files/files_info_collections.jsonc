@@ -1,0 +1,14 @@
+[
+  {
+    "name": "static",
+    "url": "/data/files/info_static.json",
+    "web_prefix": "/static/",
+    "path_prefix": "files/static/"
+  },
+  {
+    "name": "assets",
+    "url": "/data/files/info_assets.json",
+    "web_prefix": "/assets/",
+    "path_prefix": "files/assets/"
+  }
+]

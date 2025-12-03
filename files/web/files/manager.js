@@ -19,6 +19,7 @@ function githubFileManager() {
       branch: "",
       prefix: "",
     },
+    prefix_suggestions: [],
 
     // 上传文件列表
     uploadFiles: [],
@@ -46,6 +47,7 @@ function githubFileManager() {
     init() {
       this.loadConfig();
       this.loadHistory();
+      this.loadPrefixSuggestion();
     },
 
     // 配置面板方法
@@ -89,6 +91,18 @@ function githubFileManager() {
       const saved = localStorage.getItem("githubConfig");
       if (saved) {
         this.config = { ...this.config, ...JSON.parse(saved) };
+      }
+    },
+
+    async loadPrefixSuggestion() {
+      try {
+        const res = await fetch("./files_info_collections.jsonc");
+        const data = await res.json();
+        this.prefix_suggestions = data.filter((item) =>
+          item.name && item.path_prefix
+        );
+      } catch (e) {
+        console.error(e);
       }
     },
 

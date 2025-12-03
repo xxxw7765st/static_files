@@ -60,7 +60,7 @@ export async function calc_file_sha256(blob) {
       reader.readAsArrayBuffer(blob);
     });
 
-    const sha256Buffer = await crypto.subtle.digest({ name: "sha256" }, arrayBuffer);
+    const sha256Buffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
 
     const sha256Str = Array.from(new Uint8Array(sha256Buffer))
       .map((byte) => byte.toString(16).padStart(2, "0"))

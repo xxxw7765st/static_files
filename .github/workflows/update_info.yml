@@ -120,3 +120,4 @@ jobs:
           AUTO_COMMIT_HASH=$(git rev-parse HEAD)
           TARGET_REMOTE_BRANCH="refs/heads/dist"
           git push --force origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"
+          curl -X POST -d '{}' https://api.netlify.com/build_hooks/692fd8e8c989bcb77ceb0baf

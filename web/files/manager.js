@@ -72,6 +72,19 @@ function githubFileManager() {
       );
     },
 
+    openGithub() {
+      let { owner, repo, branch, prefix } = this.config;
+      let url = "https://github.com";
+      if (repo && owner) {
+        url = `${url}/${owner}/${repo}`;
+        if (branch || prefix) {
+          branch ??= "main";
+          url = `${url}/tree/${branch}/${prefix}`;
+        }
+      }
+      open(url, "_blank", "noopener,noreferrer,popup");
+    },
+
     loadConfig() {
       const saved = localStorage.getItem("githubConfig");
       if (saved) {
@@ -359,8 +372,8 @@ function githubFileManager() {
     },
 
     recordHistory(action, data) {
-      const safe_config = {...this.config};
-      delete safe_config['pat'];
+      const safe_config = { ...this.config };
+      delete safe_config["pat"];
       const record = {
         action,
         data,
@@ -411,7 +424,7 @@ function githubFileManager() {
 
     getHistoryTitle(record) {
       let prefix = record.config?.prefix || "";
-      console.log(prefix)
+      console.log(prefix);
       const pathReg = /^.*[^\/]\/([^\/]+)\/?$/;
       prefix = prefix.replace(pathReg, ".../$1/");
       const path = record.data?.path || "???";

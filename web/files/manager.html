@@ -67,7 +67,7 @@
         outline-color: royalblue;
         padding-right: 2rem; /* 为清空按钮留出空间 */
       }
-      .hover-light:hover {
+      .hover-light:active, .hover-light:hover {
         opacity: 60%;
       }
       .hover-shadow:hover {
@@ -75,6 +75,9 @@
           0 4px 6px -1px rgba(0, 0, 0, 0.1),
           0 2px 4px -1px rgba(0, 0, 0, 0.06);
         transition: box-shadow 0.3s ease;
+      }
+      ::placeholder {
+        opacity: 50%;
       }
     </style>
   </head>
@@ -388,7 +391,7 @@
                         <!-- 重置更改 -->
                         <button
                           @click="resetFile(index)"
-                          class="py-1 px-3 text-sm text-gray-600 bg-gray-100 rounded transition hover-shadow"
+                          class="py-1 px-3 text-sm text-gray-600 bg-gray-100 rounded transition hover-light"
                           x-show="file.name !== file.origin_file.name || file.file !== file.origin_file"
                         >
                           重置
@@ -397,7 +400,7 @@
                         <!-- 文件操作按钮 -->
                         <button
                           @click="showFileOperations(index)"
-                          class="py-1 px-3 text-sm text-blue-600 bg-blue-100 rounded transition hover-shadow"
+                          class="py-1 px-3 text-sm text-blue-600 bg-blue-100 rounded transition hover-light"
                         >
                           操作
                         </button>
@@ -405,7 +408,7 @@
                         <!-- 删除文件 -->
                         <button
                           @click="removeFile(index)"
-                          class="py-1 px-3 text-sm text-red-600 bg-red-100 rounded transition hover-shadow"
+                          class="py-1 px-3 text-sm text-red-600 bg-red-100 rounded transition hover-light"
                         >
                           删除
                         </button>

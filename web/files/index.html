@@ -28,7 +28,7 @@
         background-color: color-mix(in srgb, dodgerblue 20%, transparent);
       }
       .file-item:hover {
-        background-color: color-mix(in srgb, gray 20%, transparent);
+        background-color: color-mix(in srgb, gray 10%, transparent);
       }
       .breadcrumb a {
         transition: color 0.2s;
@@ -54,7 +54,7 @@
 
       <!-- 面包屑导航 -->
       <div
-        class="flex items-center mb-6 space-x-2 text-sm text-gray-600 breadcrumb"
+        class="flex flex-wrap items-center mb-6 space-x-2 text-sm text-gray-600 breadcrumb"
       >
         <template x-for="(item, index) in breadcrumbItems" :key="index">
           <div class="flex items-center">
@@ -75,7 +75,7 @@
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
         <!-- 标题栏 -->
         <div
-          class="grid grid-cols-12 gap-4 p-4 text-sm font-medium text-gray-500 border-b border-gray-200"
+          class="grid grid-cols-12 gap-4 p-4 px-6 text-sm font-medium text-gray-500 border-b border-gray-200"
         >
           <div class="col-span-6">名称</div>
           <div class="col-span-3 text-right">修改日期</div>
@@ -83,14 +83,14 @@
         </div>
 
         <!-- 文件夹和文件列表 -->
-        <div class="py-4 px-1">
+        <div class="py-4 px-4">
           <template x-if="currentFiles.length === 0">
             <div class="py-8 text-center text-gray-500">此文件夹为空</div>
           </template>
 
           <template x-for="item in sortedFiles" :key="item.id">
             <div
-              class="grid grid-cols-12 gap-4 p-3 border-b border-gray-100 cursor-pointer"
+              class="grid grid-cols-12 gap-4 p-2 border-b border-gray-100 cursor-pointer"
               :class="item.type === 'folder' ? 'folder-item' : 'file-item'"
               @click="item.type === 'folder' ? enterFolder(item) : showDetails(item)"
               :data-item-id="item.id"
@@ -106,14 +106,14 @@
 
               <!-- 修改日期 -->
               <div
-                class="col-span-3 text-sm text-right text-gray-500 of-scroll"
+                class="col-span-3 text-xs justify-end text-gray-500 of-scroll flex items-center"
                 style="white-space: nowrap; overflow: auto"
                 x-text="formatShortDate(item.updated_at || item.last_modified_at)"
               >
               </div>
 
               <!-- 大小 -->
-              <div class="col-span-3 text-sm text-right text-gray-500">
+              <div class="col-span-3 text-xs justify-end text-gray-500 flex items-center">
                 <span
                   x-text="formatFileSize(item.type === 'folder' ? (item.size || item.total_size_bytes || 0) : (item.size || item.size_bytes || 0))"
                 ></span>
@@ -142,7 +142,7 @@
                   <div class="font-medium" x-text="detailItem.name"></div>
                   <div
                     class="text-xs text-gray-400"
-                    x-text="detailItem.relative_path"
+                    x-text="getFileWebPath(detailItem)"
                   >
                   </div>
                 </div>
@@ -461,7 +461,8 @@
             let currentFolder = this.folderData;
 
             for (const pathItem of path) {
-              const children = currentFolder.files || currentFolder.children || []
+              const children = currentFolder.files ||
+                currentFolder.children || [];
               const folder = children.find((f) =>
                 f.type === "folder" && f.name === pathItem.name
               );

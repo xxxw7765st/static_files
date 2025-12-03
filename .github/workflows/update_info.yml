@@ -69,7 +69,7 @@ jobs:
           rm -rf files/web || true
           cp -Rf web files/
 
-      - name: Process web/
+      - name: Process data/
         run: |
           mkdir -p files/data
           mkdir -p data

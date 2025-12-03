@@ -424,7 +424,6 @@ function githubFileManager() {
 
     getHistoryTitle(record) {
       let prefix = record.config?.prefix || "";
-      console.log(prefix);
       const pathReg = /^.*[^\/]\/([^\/]+)\/?$/;
       prefix = prefix.replace(pathReg, ".../$1/");
       const path = record.data?.path || "???";

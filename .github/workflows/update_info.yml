@@ -91,7 +91,7 @@ jobs:
           file_pattern: "files/**/* data/**/*"
           commit_user_name: "GitHub Actions"
           commit_user_email: "actions@github.com"
-          commit_author: "GitHub Actions"
+          # commit_author: "GitHub Actions"
           skip_dirty_check: false
 
       - name: Get pending Count

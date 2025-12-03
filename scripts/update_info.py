@@ -8,6 +8,7 @@ changes: list[str] = []
 try:
     with open(".github/outputs/all_changed_files.json") as f:
         changes: list[str] = json.load(f)
+    changes = [ s.encode().decode("unicode_escape") if s[0] == s[-1] == '"' else s for s in changes]
 except:
     pass
 

@@ -2,7 +2,7 @@ import os
 import re
 from typing import Callable
 
-from utils import calc_md5
+from utils import calc_sha256
 
 HASH_NAME_PATTERN = re.compile(r"_H[0-9a-zA-Z]{8}_")
 
@@ -19,7 +19,7 @@ def action_rename(filepath: str, name: str):
 
 
 def action_hash_name(filepath: str, _: list[str]):
-    hash_str = calc_md5(filepath).zfill(8)[:8]
+    hash_str = calc_sha256(filepath).zfill(8)[:8]
     bname = os.path.basename(filepath)
     name, ext = os.path.splitext(bname)
     name = HASH_NAME_PATTERN.sub("", name)

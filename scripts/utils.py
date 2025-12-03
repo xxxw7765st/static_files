@@ -15,12 +15,12 @@ def format_size(bytes_int: int):
 BASE62_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-def calc_md5(file_path, chunk=4096):
-    md5 = hashlib.md5()
+def calc_sha256(file_path, chunk=4096):
+    sha256 = hashlib.sha256()
     with open(file_path, "rb") as f:
         while chunk_data := f.read(chunk):
-            md5.update(chunk_data)
-    num = int.from_bytes(md5.digest(), byteorder="big")
+            sha256.update(chunk_data)
+    num = int.from_bytes(sha256.digest(), byteorder="big")
     result = []
     while num > 0:
         num, rem = divmod(num, 62)

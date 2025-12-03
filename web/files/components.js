@@ -1,4 +1,4 @@
-import { calc_file_md5, format } from "./utils.js";
+import { calc_file_sha256, format } from "./utils.js";
 import { squish } from "https://esm.sh/picsquish@0.3.0";
 
 class Modal {
@@ -312,7 +312,7 @@ const fileOperations = [
   {
     name: "哈希文件名",
     do: async (pathname, file) => {
-      const { hash_name } = await calc_file_md5(file);
+      const { hash_name } = await calc_file_sha256(file);
       const { dir, name, ext } = format.parse_file_path(pathname);
       const pure_name = name.replace(/_H[0-9a-zA-Z]_/g, "");
       return [

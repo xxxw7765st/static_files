@@ -51,7 +51,7 @@ function arrayBufferToBase62(buffer) {
   return result;
 }
 
-export async function calc_file_md5(blob) {
+export async function calc_file_sha256(blob) {
   try {
     const arrayBuffer = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -60,17 +60,17 @@ export async function calc_file_md5(blob) {
       reader.readAsArrayBuffer(blob);
     });
 
-    const md5Buffer = await crypto.subtle.digest({ name: "MD5" }, arrayBuffer);
+    const sha256Buffer = await crypto.subtle.digest({ name: "sha256" }, arrayBuffer);
 
-    const md5Str = Array.from(new Uint8Array(md5Buffer))
+    const sha256Str = Array.from(new Uint8Array(sha256Buffer))
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
 
-    const md5Base62 = arrayBufferToBase62(md5Buffer);
-    const md5Base62First8 = md5Base62.padStart(8, "0").slice(0, 8);
+    const sha256Base62 = arrayBufferToBase62(sha256Buffer);
+    const sha256Base62First8 = sha256Base62.padStart(8, "0").slice(0, 8);
     return {
-      md5: md5Str,
-      hash_name: md5Base62First8,
+      sha256: sha256Str,
+      hash_name: sha256Base62First8,
     };
   } catch (err) {
     throw new Error(`哈希计算失败：${err.message}`);

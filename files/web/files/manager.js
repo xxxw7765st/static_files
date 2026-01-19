@@ -114,9 +114,13 @@ function githubFileManager() {
     },
 
     async loadPrefixSuggestion() {
+      const CacheFetcher = window.Utils2?.CacheFetcher;
+      const fetcher = await CacheFetcher.create();
       try {
-        const res = await fetch("./files_info_collections.jsonc");
-        const data = await res.json();
+        const data = await fetcher.fetch_data({
+          request: "./files_info_collections.jsonc",
+          responseType: "json",
+        });
         this.prefix_suggestions = data.filter((item) =>
           item.name && item.path_prefix
         );

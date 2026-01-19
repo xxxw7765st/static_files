@@ -32,25 +32,6 @@ jobs:
           fi
           rm -rf upload
 
-      # - name: Detect changes
-      #   run: |
-      #     echo "all changed files :"
-      #     jq . .github/outputs/all_changed_files.json
-      #     echo ""
-      #     echo "all changed and modified files :"
-      #     jq . .github/outputs/all_changed_and_modified_files.json
-      # - name: Update Info
-      #   run: |
-      #     echo "changed files :"
-      #     cat .github/outputs/all_changed_files.json
-      #     echo ""
-      #     echo "update:"
-      #     python scripts/update_info.py
-
-      # - name: Pull remote latest (conflict uses push b's content)
-      #   run: |
-      #     git branch --set-upstream-to=origin/data data
-      #     git pull origin data -X theirs --no-edit
 
       - name: Auto-commit
         id: auto_commit

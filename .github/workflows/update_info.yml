@@ -122,5 +122,5 @@ jobs:
           git push --force origin "$AUTO_COMMIT_HASH:$TARGET_REMOTE_BRANCH"
           NETLIFY_HOOK="${{ secrets.NETLIFY_HOOK }}"
           if [-n "$NETLIFY_HOOK"]; then
-            curl -X POST -d '{}' "$NETLIFY_HOOK"
+            curl -X POST -d '{}' "${NETLIFY_HOOK}&clear_cache=true"
           fi

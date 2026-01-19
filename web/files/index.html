@@ -12,11 +12,6 @@
       href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.0/css/all.min.css"
       crossorigin="anonymous"
     >
-    <!-- Alpine.js -->
-    <script
-      defer
-      src="https://s4.zstatic.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
     <style>
       .file-item, .folder-item {
         transition: all 0.2s ease;
@@ -106,14 +101,16 @@
 
               <!-- 修改日期 -->
               <div
-                class="col-span-3 text-xs justify-end text-gray-500 of-scroll flex items-center"
+                class="flex col-span-3 justify-end items-center text-xs text-gray-500 of-scroll"
                 style="white-space: nowrap; overflow: auto"
                 x-text="formatShortDate(item.updated_at || item.last_modified_at)"
               >
               </div>
 
               <!-- 大小 -->
-              <div class="col-span-3 text-xs justify-end text-gray-500 flex items-center">
+              <div
+                class="flex col-span-3 justify-end items-center text-xs text-gray-500"
+              >
                 <span
                   x-text="formatFileSize(item.type === 'folder' ? (item.size || item.total_size_bytes || 0) : (item.size || item.size_bytes || 0))"
                 ></span>
@@ -169,6 +166,23 @@
                   >
                   </div>
                 </div>
+                <template x-if="detailItem.type === 'folder'">
+                  <div>
+                    <div class="text-xs text-gray-400">统计</div>
+                    <div>
+                      <span x-text="getFolderCount(detailItem)"></span> 文件夹，
+                      <span x-text="getFileCount(detailItem)"></span> 文件
+                    </div>
+                  </div>
+                </template>
+                <template x-if="detailItem.type === 'file'">
+                  <div>
+                    <div class="text-xs text-gray-400">哈希值</div>
+                    <div>
+                      <span x-text="getFileHash(detailItem)"></span>
+                    </div>
+                  </div>
+                </template>
                 <template x-if="detailItem.type === 'file'">
                   <div>
                     <div class="text-xs text-gray-400">链接</div>
@@ -191,18 +205,16 @@
                     </div>
                   </div>
                 </template>
-                <template x-if="detailItem.type === 'folder'">
-                  <div>
-                    <div class="text-xs text-gray-400">统计</div>
-                    <div>
-                      <span x-text="getFolderCount(detailItem)"></span> 文件夹，
-                      <span x-text="getFileCount(detailItem)"></span> 文件
-                    </div>
-                  </div>
-                </template>
                 <div class="col-span-2">
                   <div class="text-xs text-gray-400">操作</div>
                   <div class="flex gap-4 of-auto">
+                    <span
+                      class="link-item"
+                      @click="onRefreshWithoutCache"
+                    >
+                      <i class="fas fa-arrows-rotate"></i>
+                      刷新
+                    </span>
                     <a
                       class="link-item"
                       href="manager.html"
@@ -240,303 +252,12 @@
       </div>
     </div>
 
-    <script>
-      function fileBrowser() {
-        return {
-          // 图标映射
-          iconMap: {
-            "txt": { icon: "fa-file-lines", color: "text-blue-600" },
-            "jpg": { icon: "fa-file-image", color: "text-green-500" },
-            "png": { icon: "fa-file-image", color: "text-green-500" },
-            "default": { icon: "fa-file", color: "text-gray-500" },
-          },
-
-          // 文件集合配置
-          fileCollections: [],
-
-          // 合并后的文件夹数据
-          folderData: {
-            target_folder: "根目录",
-            generated_at: new Date().toISOString(),
-            files: [],
-          },
-
-          // 当前路径栈
-          pathStack: [],
-          currentFiles: [],
-          detailItem: null,
-
-          async init() {
-            try {
-              // 1. 加载图标映射
-              try {
-                const iconMapResponse = await fetch(
-                  "./files_info_collections.jsonc",
-                );
-                if (iconMapResponse.ok) {
-                  const iconMapData = await iconMapResponse.json();
-                  this.iconMap = {
-                    ...this.iconMap,
-                    ...iconMapData,
-                  };
-                }
-              } catch (e) {
-                console.warn("无法加载图标映射文件，使用默认图标");
-              }
-
-              // 2. 加载文件集合索引
-              const collectionsResponse = await fetch(
-                "./files_info_collections.jsonc",
-              );
-              this.fileCollections = await collectionsResponse.json();
-
-              // 3. 加载所有文件集合
-              const collectionPromises = this.fileCollections.map(
-                async (collection) => {
-                  try {
-                    const response = await fetch(collection.url);
-                    if (!response.ok) {
-                      throw new Error(`无法加载 ${collection.name}`);
-                    }
-
-                    const data = await response.json();
-                    const { web_prefix, path_prefix } = collection;
-
-                    // 将对象结构的children转换为数组结构
-                    if (
-                      data.children && typeof data.children === "object"
-                    ) {
-                      data.children = this.childrenObjectToArray(
-                        data.children,
-                        {
-                          web_prefix,
-                          path_prefix,
-                        },
-                      );
-                    }
-
-                    // 添加集合信息
-                    data.collection = collection;
-
-                    return data;
-                  } catch (error) {
-                    console.error(
-                      `加载集合 ${collection.name} 失败:`,
-                      error,
-                    );
-                    return null;
-                  }
-                },
-              );
-
-              const collectionsData = await Promise.all(
-                collectionPromises,
-              );
-
-              // 4. 合并所有集合数据
-              this.folderData.files = collectionsData.filter((item) =>
-                item !== null
-              );
-
-              // 5. 设置当前文件列表
-              this.currentFiles = this.folderData.files;
-
-              // 6. 为每个项目添加唯一ID
-              this.assignIds(this.currentFiles);
-            } catch (error) {
-              console.error("初始化失败:", error);
-              document.getElementById("file-list").innerHTML =
-                '<div class="py-8 text-center text-red-500">加载文件列表失败，请刷新页面重试</div>';
-            }
-          },
-
-          get breadcrumbItems() {
-            const items = [{ name: this.folderData.target_folder }];
-
-            this.pathStack.forEach((item) => {
-              items.push({ name: item.name });
-            });
-
-            return items;
-          },
-
-          get sortedFiles() {
-            return [...this.currentFiles].sort((a, b) => {
-              if (a.type !== b.type) {
-                return a.type === "folder" ? -1 : 1;
-              }
-              return a.name.localeCompare(b.name);
-            });
-          },
-
-          formatFileSize(bytes) {
-            if (bytes === 0) return "0 B";
-            const k = 1024;
-            const sizes = ["B", "KB", "MB", "GB"];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) +
-              " " + sizes[i];
-          },
-
-          formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString("zh-CN") + " " +
-              date.toLocaleTimeString("zh-CN", {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-          },
-          _today_date: new Date(),
-          formatShortDate(dateString) {
-            const d = new Date(dateString);
-            if (isNaN(d.getTime())) return "";
-            const t = d.getTime();
-            const todayStart = new Date().setHours(0, 0, 0, 0);
-            const dayMs = 86400000;
-            return t >= todayStart && t < todayStart + dayMs
-              ? `${d.getHours()}:${d.getMinutes()}`
-              : t >= todayStart - dayMs && t < todayStart
-              ? `昨天 ${d.getHours()}:${d.getMinutes()}`
-              : `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-          },
-
-          getFileIcon(filename) {
-            const ext = filename.split(".").pop().toLowerCase();
-            const icon = this.iconMap[ext] || this.iconMap["default"];
-            return `${icon.icon} ${icon.color}`;
-          },
-
-          childrenObjectToArray(childrenObj, injects = {}) {
-            if (!childrenObj) return [];
-            return Object.values(childrenObj).map((item) => {
-              if (item.type === "folder" && item.children) {
-                item.children = this.childrenObjectToArray(
-                  item.children,
-                  injects,
-                );
-              }
-              item = {
-                ...injects,
-                ...item,
-              };
-              return item;
-            });
-          },
-
-          assignIds(items, parentId = "") {
-            items.forEach((item, index) => {
-              item.id = parentId
-                ? `${parentId}-${index}`
-                : `item-${index}`;
-              if (item.children) {
-                this.assignIds(item.children, item.id);
-              }
-            });
-          },
-
-          enterFolder(folder) {
-            this.pathStack.push({
-              name: folder.name,
-              relative_path: folder.relative_path,
-            });
-            this.currentFiles = folder.children || [];
-            this.showDetails(folder);
-          },
-
-          navigateToBreadcrumb(index) {
-            if (index === 0) {
-              this.pathStack = [];
-              this.currentFiles = this.folderData.files;
-              this.detailItem = null;
-            } else {
-              this.pathStack = this.pathStack.slice(0, index);
-
-              const folder = this.getFolderAtPath(this.pathStack);
-              this.currentFiles = folder?.children || [];
-              this.detailItem = folder;
-            }
-          },
-
-          getFolderAtPath(path) {
-            let currentFolder = this.folderData;
-
-            for (const pathItem of path) {
-              const children = currentFolder.files ||
-                currentFolder.children || [];
-              const folder = children.find((f) =>
-                f.type === "folder" && f.name === pathItem.name
-              );
-              if (folder) {
-                currentFolder = folder;
-              } else {
-                break;
-              }
-            }
-            return currentFolder;
-          },
-
-          showDetails(item) {
-            this.detailItem = item;
-          },
-
-          getFileName(file) {
-            const name = file.name || "???";
-            return name.replace(/_H[0-9a-zA-Z]{8}_/g, "");
-          },
-          getFileWebPath(file) {
-            return `${file.web_prefix || ""}${file.relative_path}`;
-          },
-          getFileRepoPath(file) {
-            const path = `${
-              file.path_prefix || ""
-            }${file.relative_path}`;
-            if (
-              file.type === "folder" && path[path.length - 1] !== "/"
-            ) {
-              return path + "/";
-            }
-            return path;
-          },
-          getFileUrl(file) {
-            const web_path = this.getFileWebPath(file);
-            const { host, protocol, hostname, pathname } = location;
-            if (
-              hostname === "127.0.0.1" || hostname === "localhost" ||
-              hostname?.startsWith?.("192.168.")
-            ) {
-              return `${protocol}//${host}/${
-                this.getFileRepoPath(file)
-              }`;
-            }
-            return `${protocol}//${host}${web_path}`;
-          },
-
-          async copyToClipboard(str) {
-            if (typeof str !== "string" || !str) return;
-
-            try {
-              await navigator.clipboard.writeText(str);
-              alert("链接已复制到剪贴板");
-            } catch (err) {
-              alert(`复制失败：${err.message}`);
-            }
-          },
-
-          getFileCount(folder) {
-            if (!folder.children) return 0;
-            return folder.children.filter((item) =>
-              item.type === "file"
-            ).length;
-          },
-
-          getFolderCount(folder) {
-            if (!folder.children) return 0;
-            return folder.children.filter((item) =>
-              item.type === "folder"
-            ).length;
-          },
-        };
-      }
-    </script>
+    <script type="module" src="utils2.js"></script>
+    <script src="index.js"></script>
+    <!-- Alpine.js -->
+    <script
+      defer
+      src="https://s4.zstatic.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
   </body>
 </html>

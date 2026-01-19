@@ -3,7 +3,7 @@ import os
 from datetime import datetime, timezone
 from typing import Literal, Optional, TypedDict
 
-from utils import format_size
+from utils import calc_sha256, format_size
 
 
 class FileInfo(TypedDict):
@@ -13,7 +13,15 @@ class FileInfo(TypedDict):
     size: int
     updated_at: str
     created_at: str
+    hash: Optional[str]  # 文件哈希
     children: Optional[dict[str, "FileInfo"]]
+
+
+def calc_hash(file_path):
+    try:
+        return calc_sha256(file_path)
+    except Exception:
+        return ""
 
 
 class FileManager:
@@ -33,6 +41,7 @@ class FileManager:
                 "size": 0,
                 "updated_at": now,
                 "created_at": now,
+                "hash": None,
                 "children": {},
             }
 
@@ -47,60 +56,77 @@ class FileManager:
 
         actual_path = os.path.join(self.base_folder, folder["relative_path"])
         if not os.path.exists(actual_path):
-            folder['children'] = {}
+            folder["children"] = {}
             return
 
         # 获取实际文件系统中的文件/文件夹
-        actual_items = set()
+        actual_items = {}
         for item in os.listdir(actual_path):
             item_path = os.path.join(actual_path, item)
             if os.path.isfile(item_path):
-                actual_items.add((item, "file"))
+                file_hash = calc_hash(item_path)
+                actual_items[item] = ("file", file_hash)
             elif os.path.isdir(item_path):
-                actual_items.add((item, "folder"))
+                actual_items[item] = ("folder", None)
 
         # 获取当前记录的文件/文件夹
         current_children = folder.get("children", {}) or {}
-        recorded_items = {
-            (name, child["type"]) for name, child in current_children.items()
-        }
 
-        # 检测删除
-        for name, item_type in recorded_items - actual_items:
+        # 检测删除和变更
+        items_to_remove = []
+        for name, child in current_children.items():
+            if name not in actual_items:
+                items_to_remove.append(name)
+            elif child["type"] == "file":
+                actual_type, actual_hash = actual_items[name]
+                if (
+                    actual_type == "file"
+                    and actual_hash != child.get("hash", "")
+                ):
+                    # 重新计算信息
+                    items_to_remove.append(name)
+                    # 先删除旧记录
+                    # 在actual_items中保留，会在新增处理中重新添加
+
+        for name in items_to_remove:
             del current_children[name]
 
-        # 检测新增
-        for name, item_type in actual_items - recorded_items:
-            relative_path = os.path.join(folder["relative_path"], name).replace(
-                "\\", "/"
-            )
-            if item_type == "file":
-                file_path = os.path.join(actual_path, name)
-                current_children[name] = {
-                    "type": "file",
-                    "name": name,
-                    "relative_path": relative_path,
-                    "size": os.path.getsize(file_path),
-                    "updated_at": time,
-                    "created_at": time,
-                    "children": None,
-                }
-            else:  # folder
-                current_children[name] = {
-                    "type": "folder",
-                    "name": name,
-                    "relative_path": relative_path,
-                    "size": 0,
-                    "updated_at": time,
-                    "created_at": time,
-                    "children": {},
-                }
-                # 递归处理新文件夹
-                self.update_structure(time, current_children[name])
+        # 检测新增和修改过的文件
+        for name, (item_type, item_hash) in actual_items.items():
+            if name not in current_children:
+                # 新增项目
+                relative_path = os.path.join(folder["relative_path"], name).replace(
+                    "\\", "/"
+                )
+                if item_type == "file":
+                    file_path = os.path.join(actual_path, name)
+                    file_size = os.path.getsize(file_path)
+                    current_children[name] = {
+                        "type": "file",
+                        "name": name,
+                        "relative_path": relative_path,
+                        "size": file_size,
+                        "updated_at": time,
+                        "created_at": time,
+                        "hash": item_hash,
+                        "children": None,
+                    }
+                else:  # folder
+                    current_children[name] = {
+                        "type": "folder",
+                        "name": name,
+                        "relative_path": relative_path,
+                        "size": 0,
+                        "updated_at": time,
+                        "created_at": time,
+                        "hash": None,
+                        "children": {},
+                    }
+                    self.update_structure(time, current_children[name])
 
-        # 更新现有项目
+        # 更新现有项目（文件夹的递归更新）
         for name, child in current_children.items():
-            if (name, child["type"]) in actual_items and child["type"] == "folder":
+            if child["type"] == "folder" and name in actual_items:
                 # 递归更新现有文件夹
                 self.update_structure(time, child)
 

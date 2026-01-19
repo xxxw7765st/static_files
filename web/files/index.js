@@ -283,7 +283,7 @@ function fileBrowser() {
     },
 
     getFileHash(file) {
-      return file.hash || "<unknown>";
+      return file.hash || "<unknown>Cm6h7jd6oBu5UGdWCPUkRhzT92aD39MN7nez5zoHlCG";
     },
 
     getFileCount(folder) {

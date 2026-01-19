@@ -25,7 +25,7 @@ jobs:
           mkdir -p upload
           rm -rf upload
           mkdir -p upload
-          git checkout upload -- upload/
+          git checkout origin/upload -- upload/
           if find upload -mindepth 1 -maxdepth 1 | read; then
             cp -rf upload/* files/
           fi

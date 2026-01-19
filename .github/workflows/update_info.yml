@@ -3,7 +3,7 @@ on:
   push:
     branches: [data]
   workflow_run:
-    workflows: [Clean and Merge]
+    workflows: [Clean and Merge, Upload Files in a Branch]
     types: [completed]
 
 concurrency:

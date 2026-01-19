@@ -1,4 +1,4 @@
-name: Update Data Info
+name: Upload Files in a Branch
 on:
   push:
     branches: [upload]

@@ -1,0 +1,64 @@
+name: Update Data Info
+on:
+  push:
+    branches: [upload]
+
+concurrency:
+  group: update_branch
+  cancel-in-progress: false
+
+jobs:
+  process-files:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: data
+          persist-credentials: true
+
+      - name: Get upload files
+        run: |
+          mkdir -p upload
+          rm -rf upload
+          mkdir -p upload
+          git checkout upload -- upload/
+          if find upload -mindepth 1 -maxdepth 1 | read; then
+            cp -rf upload/* files/
+          fi
+          rm -rf upload
+
+      # - name: Detect changes
+      #   run: |
+      #     echo "all changed files :"
+      #     jq . .github/outputs/all_changed_files.json
+      #     echo ""
+      #     echo "all changed and modified files :"
+      #     jq . .github/outputs/all_changed_and_modified_files.json
+      # - name: Update Info
+      #   run: |
+      #     echo "changed files :"
+      #     cat .github/outputs/all_changed_files.json
+      #     echo ""
+      #     echo "update:"
+      #     python scripts/update_info.py
+
+      # - name: Pull remote latest (conflict uses push b's content)
+      #   run: |
+      #     git branch --set-upstream-to=origin/data data
+      #     git pull origin data -X theirs --no-edit
+
+      - name: Auto-commit
+        id: auto_commit
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "CI(info): upload files"
+          branch: data
+          file_pattern: "files/**/* data/**/*"
+          commit_user_name: "GitHub Actions"
+          commit_user_email: "actions@github.com"
+          # commit_author: "GitHub Actions"
+          skip_dirty_check: false
